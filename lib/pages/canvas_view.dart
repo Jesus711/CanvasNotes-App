@@ -196,13 +196,12 @@ class _CanvasViewState extends State<CanvasView> {
         row = [];
       }
       row.add(
-          '[IconButton(onPressed: () {}, icon: const Icon(Icons.circle), color: colorsList[$i][2]), $i]'
-      );
+          '[IconButton(onPressed: () {}, icon: const Icon(Icons.circle), color: colorsList[$i][2]), $i]');
     }
 
     temp.add(row);
 
-    for (var i = 0; i < colorPickerList.length; i++){
+    for (var i = 0; i < colorPickerList.length; i++) {
       print(temp[i].toString());
     }
     print("ColorPicker Created");
@@ -217,7 +216,7 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   void setColor(Color color) {
-      _controller.setStyle(color: color);
+    _controller.setStyle(color: color);
   }
 
   void displayColorPicker() {
@@ -245,29 +244,186 @@ class _CanvasViewState extends State<CanvasView> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Row(
-                    children: colorPickerList[0],
+                    children: [
+
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 0)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[0][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 1)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[1][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 2)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[2][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 3)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[3][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 4)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[4][2])
+                    ],
                   ),
                   Row(
-                    children: colorPickerList[1],
+                    children: [
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 5)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[5][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 6)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[6][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 7)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[7][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 8)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[8][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 9)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[9][2])
+                    ],
                   ),
                   Row(
-                    children: colorPickerList[2],
+                    children: [
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 10)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[10][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 11)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[11][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 12)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[12][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 13)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[13][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 14)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[14][2])
+                    ],
                   ),
                   Row(
-                    children: colorPickerList[3],
+                    children: [
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 15)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[15][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 16)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[16][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 17)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[17][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 18)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[18][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 19)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[19][2])
+                    ],
                   ),
                   Row(
-                    children: colorPickerList[4],
+                    children: [
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 20)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[20][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 21)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[21][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 22)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[22][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 23)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[23][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 24)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[24][2])
+                    ],
                   ),
                   Row(
-                    children: colorPickerList[5],
+                    children: [
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 25)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[25][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 26)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[26][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 27)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[27][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 28)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[28][2]),
+                      IconButton(
+                          onPressed: () => {Navigator.pop(context, 29)},
+                          iconSize: 42,
+                          icon: const Icon(Icons.circle),
+                          color: colorsList[29][2])
+                    ],
                   )
                 ],
               ));
-        }).then((colorChoice){
-          if (colorChoice == null) return;
+        }).then((colorChoice) {
+      if (colorChoice == null) return;
 
-          _controller.setStyle(color: colorChoice);
+      _controller.setStyle(color: colorsList[colorChoice][2]);
     });
   }
 
@@ -361,8 +517,10 @@ class _CanvasViewState extends State<CanvasView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) {setDrawingBoardStyles(); buildColorPicker();});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setDrawingBoardStyles();
+      buildColorPicker();
+    });
   }
 
   @override
