@@ -1,6 +1,8 @@
+import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:canvas_notes_flutter/pages/canvas_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_drawing_board/paint_contents.dart';
+//import 'package:flutter_drawing_board/paint_contents.dart';
+//import 'package:canvas_notes_flutter/pages/draw_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,15 +21,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static List<String> canvases = [
 
-  ];
+  //final DatabaseHelper _dbHelper = DatabaseHelper();
+
+  static List<String> canvases = [];
+
+  static List<Drawing> drawingsList = [];
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+
+  // Future<void> _getDrawings() async {
+  //   List<Drawing> drawings = await _dbHelper.getDrawings();
+  //   setState(() {
+  //     drawingsList = drawings;
+  //   });
+  // }
 
 
   void _createNewCanvas() {
     
     Navigator.push(context, MaterialPageRoute(builder: (context) => const CanvasView()));
-    
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => const DrawView()));
+
     setState(() {
 // This call to setState tells the Flutter framework that something has
 // changed in this State, which causes it to rerun the build method below
@@ -46,20 +65,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade800,
-        title: const Text("Canvas Notes", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),),
+        title: const Text("Canvas Notes", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),),
       ),
       backgroundColor: Colors.blue.shade100,
-      body: canvases.isEmpty
-          ? const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 10,
-              ),
-              child: Text('Click on the + Icon to begin Creating Cavases' ,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-              ),
-            )
+      body: canvases.isEmpty ? const EmptyList()
           : ListView.builder(
               itemCount: canvases.length,
               itemBuilder: (BuildContext context, index) {
@@ -91,6 +100,27 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Create New Canvas',
         child: const Icon(Icons.add, size: 32,),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class EmptyList extends StatelessWidget {
+  const EmptyList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        child: Text(
+        'Click on the + Icon to create a Canvas to start drawing' ,
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+        textAlign: TextAlign.center,
+        )
+      )
     );
   }
 }
