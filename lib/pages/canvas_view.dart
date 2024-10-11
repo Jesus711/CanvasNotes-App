@@ -551,19 +551,18 @@ class _CanvasViewState extends State<CanvasView> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: _getImageData,
-                  icon: const Icon(Icons.save),
-                  iconSize: 30,
-                ),
-                const Text(
-                  "Save",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                )
-              ],
-            ),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade800, elevation: 0),
+                onPressed: _getImageData,
+                child: const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.save, size: 32, color: Colors.white,),
+                  ),
+                  Text("Save", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),)
+                ],
+            )),
           )
         ],
         foregroundColor: Colors.white,
