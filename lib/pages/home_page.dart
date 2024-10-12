@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.blue.shade800,
         title: const Text("Canvas Notes", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),),
       ),
-      backgroundColor: Colors.blue.shade100,
+      backgroundColor: Colors.blue.shade50,
       body: canvases.isEmpty ? const EmptyList()
           : ListView.builder(
               itemCount: canvases.length,
