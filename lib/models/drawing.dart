@@ -2,10 +2,10 @@
 import 'dart:typed_data';
 
 class Drawing {
-  final int id; // ID can be null when inserting a new drawing
-  final String name;
+  final int ID; // ID can be null when inserting a new drawing
+  final String drawingName;
   final Uint8List drawingData;
 
-  Drawing({required this.id, required this.name, required this.drawingData});
+  Drawing({required this.ID, required this.drawingName, required this.drawingData});
 
 }
