@@ -1,15 +1,17 @@
+import "dart:convert";
 import "dart:typed_data";
 
+import "package:canvas_notes_flutter/database/drawing_db.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/rendering.dart";
 import "package:flutter_drawing_board/flutter_drawing_board.dart";
-import "package:flutter_drawing_board/paint_contents.dart";
 
-import "../database/database_helper.dart";
+import "../models/drawing.dart";
 
 class CanvasView extends StatefulWidget {
-  const CanvasView({super.key});
+  CanvasView({super.key, this.importedDrawing});
+
+  final Drawing? importedDrawing;
 
   @override
   State<CanvasView> createState() => _CanvasViewState();
@@ -18,6 +20,10 @@ class CanvasView extends StatefulWidget {
 class _CanvasViewState extends State<CanvasView> {
   final DrawingController _controller = DrawingController();
   final _nameController = TextEditingController();
+
+  final DrawingDatabase _drawingDb = DrawingDatabase.instance;
+
+  late final importedDrawing = widget.importedDrawing;
 
   static List colorsList = [
     // Reds
@@ -198,7 +204,6 @@ class _CanvasViewState extends State<CanvasView> {
     ]
   ];
 
-
   void setDrawingBoardStyles() {
     _controller.setStyle(
       color: Colors.black,
@@ -236,7 +241,6 @@ class _CanvasViewState extends State<CanvasView> {
                 children: [
                   Row(
                     children: [
-
                       IconButton(
                           tooltip: colorsList[0][1],
                           onPressed: () => {Navigator.pop(context, 0)},
@@ -518,21 +522,28 @@ class _CanvasViewState extends State<CanvasView> {
               ],
             ),
           );
-        }).then((saveDrawing) {
+        }).then((saveDrawing) async {
       if (saveDrawing == null || !saveDrawing) return;
 
       String name = _nameController.text;
       if (saveDrawing) {
         if (name.isEmpty) {
           print("Saving Drawing under Untitled");
+          name = "Untitled";
         } else {
           print("Saving the drawing with the name $name");
         }
+
+        print(_controller.getJsonList());
+        print(const JsonEncoder.withIndent('  ')
+            .convert(_controller.getJsonList()));
+
+        Uint8List? drawingData =
+            (await _controller.getImageData())?.buffer.asUint8List();
+        _drawingDb.addDrawing(name, drawingData!);
+        Navigator.pop(context, true);
       }
     });
-    List<Uint8List> drawing_data =
-        (await _controller.getImageData()) as List<Uint8List>;
-    print((await _controller.getImageData())?.buffer.asUint8List());
   }
 
   @override
@@ -552,30 +563,46 @@ class _CanvasViewState extends State<CanvasView> {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade800, elevation: 0),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade800, elevation: 0),
                 onPressed: _getImageData,
                 child: const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.save, size: 32, color: Colors.white,),
-                  ),
-                  Text("Save", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.white),)
-                ],
-            )),
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.save,
+                        size: 32,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "Save",
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white),
+                    )
+                  ],
+                )),
           )
         ],
         foregroundColor: Colors.white,
         backgroundColor: Colors.blue.shade800,
-        title: const Text(
-          "New Drawing",
-          style: TextStyle(
+        title: Text(
+          importedDrawing?.drawingName ?? "New Drawing",
+          style: const TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ),
       body: DrawingBoard(
           controller: _controller,
-          background: Container(width: 1000, height: 1000, color: Colors.white),
+          background: importedDrawing != null
+              ? Image.memory(
+                  importedDrawing!.drawingData,
+                  fit: BoxFit.contain,
+                )
+              : Container(width: 1000, height: 1000, color: Colors.white),
           showDefaultActions: true,
 
           /// Enable default action options
@@ -589,8 +616,8 @@ class _CanvasViewState extends State<CanvasView> {
               ..insert(
                   0,
                   DefToolItem(
-                    icon: Icons.color_lens_outlined,
-                    color: Colors.blue.shade800,
+                    icon: Icons.color_lens_rounded,
+                    color: Colors.blue.shade300,
                     onTap: () => displayColorPicker(),
                     iconSize: 48,
                     isActive: false,
