@@ -1,6 +1,8 @@
+import 'package:canvas_notes_flutter/database/drawing_db.dart';
 import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:canvas_notes_flutter/pages/canvas_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 //import 'package:flutter_drawing_board/paint_contents.dart';
 //import 'package:canvas_notes_flutter/pages/draw_view.dart';
 
@@ -21,84 +23,117 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static final DrawingDatabase _drawingDb = DrawingDatabase.instance;
 
-  //final DatabaseHelper _dbHelper = DatabaseHelper();
-
-  static List<String> canvases = [];
-
-  static List<Drawing> drawingsList = [];
+  List<Drawing> drawingsList = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
+  void _createNewCanvas() async {
+    bool? drawingSaved = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CanvasView()));
+    setState(() {});
+  }
 
-  // Future<void> _getDrawings() async {
-  //   List<Drawing> drawings = await _dbHelper.getDrawings();
-  //   setState(() {
-  //     drawingsList = drawings;
-  //   });
-  // }
+  void _openSavedCanvas(Drawing loadDrawing) async {
+    bool? saved = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CanvasView(
+                  importedDrawing: loadDrawing,
+                )));
+  }
 
-
-  void _createNewCanvas() {
-    
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const CanvasView()));
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => const DrawView()));
-
+  void _deleteCanvas(drawingID) async {
+    _drawingDb.deleteDrawing(drawingID);
     setState(() {
-// This call to setState tells the Flutter framework that something has
-// changed in this State, which causes it to rerun the build method below
-// so that the display can reflect the updated values. If we changed
-// _counter without calling setState(), then the build method would not be
-// called again, and so nothing would appear to happen.
+
     });
+  }
+
+  Widget _drawingList() {
+    return FutureBuilder(
+      future: _drawingDb.getDrawings(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null || snapshot.data!.isEmpty) {
+          return const EmptyList();
+        }
+        return ListView.builder(
+            itemCount: snapshot.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              Drawing drawing = snapshot.data![index];
+              return Padding(
+                  padding: const EdgeInsets.fromLTRB(2, 6, 2, 0),
+                  child: Slidable(
+                      endActionPane:
+                          ActionPane(
+                              motion: const StretchMotion(),
+                              extentRatio: 0.3,
+                              children: [
+                                SlidableAction(
+                                  onPressed: (value) => {_deleteCanvas(drawing.ID)},
+                                  icon: Icons.delete,
+                                  borderRadius: BorderRadius.circular(15),
+                                  backgroundColor: Colors.red,
+                                )
+                      ]),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.blue.shade600,
+                              borderRadius: BorderRadius.circular(12),
+                              ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 20,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                drawing.drawingName,
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () => {_openSavedCanvas(drawing)},
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green.shade700),
+                                  child: const Text("Open",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20)))
+                            ],
+                          ))));
+            });
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-//
-// The Flutter framework has been optimized to make rerunning build methods
-// fast, so that you can just rebuild anything that needs updating rather
-// than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade800,
-        title: const Text("Canvas Notes", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),),
+        title: const Text(
+          "Canvas Notes",
+          style: TextStyle(
+              color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),
+        ),
       ),
       backgroundColor: Colors.blue.shade50,
-      body: canvases.isEmpty ? const EmptyList()
-          : ListView.builder(
-              itemCount: canvases.length,
-              itemBuilder: (BuildContext context, index) {
-                return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue.shade600,
-                            border: const Border(
-                                bottom: BorderSide(
-                                    width: 4,
-                                    color: Colors.white
-                                )
-                            )
-                            //borderRadius: BorderRadius.circular(15),
-                          ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 20,
-                        ),
-                        child: Text(canvases[index], style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),))
-                );
-              },
-            ),
+      body: _drawingList(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: _createNewCanvas,
         tooltip: 'Create New Canvas',
-        child: const Icon(Icons.add, size: 32,),
+        child: const Icon(
+          Icons.add,
+          size: 32,
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
@@ -111,16 +146,14 @@ class EmptyList extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return const Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        child: Text(
-        'Click on the + Icon to create a Canvas to start drawing' ,
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-        textAlign: TextAlign.center,
-        )
-      )
-    );
+        child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+            ),
+            child: Text(
+              'Click on the + Icon to create a Canvas to start drawing',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            )));
   }
 }
