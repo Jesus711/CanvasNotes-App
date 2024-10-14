@@ -483,7 +483,7 @@ class _CanvasViewState extends State<CanvasView> {
                                 setState(() {
                                   _colorOpacity = value;
                                 });
-                                _controller.setStyle(color: _activeColor.withOpacity(_colorOpacity));
+                                setColor(_activeColor);
                               },
                             ),
                           ],
@@ -641,7 +641,9 @@ class _CanvasViewState extends State<CanvasView> {
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ),
-      body: DrawingBoard(
+      body: Stack(
+        children: [
+          DrawingBoard(
           controller: _controller,
           background: importedDrawing != null
               ? Image.memory(
@@ -669,6 +671,16 @@ class _CanvasViewState extends State<CanvasView> {
                     isActive: false,
                   ));
           }),
-    );
+          Positioned(
+              top: 10,
+              left: 5,
+              child: Row(
+            children: [
+            const Text("Active Color: ", style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w500),),
+            Icon(Icons.circle, color: _activeColor.withOpacity(_colorOpacity), size: 32,),
+            ],
+        )),
+      ],
+    ));
   }
 }
