@@ -2,6 +2,9 @@ import "dart:convert";
 import "dart:typed_data";
 
 import "package:canvas_notes_flutter/database/drawing_db.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_drawing_board/flutter_drawing_board.dart";
@@ -9,7 +12,7 @@ import "package:flutter_drawing_board/flutter_drawing_board.dart";
 import "../models/drawing.dart";
 
 class CanvasView extends StatefulWidget {
-  CanvasView({super.key, this.importedDrawing});
+  const CanvasView({super.key, this.importedDrawing});
 
   final Drawing? importedDrawing;
 
@@ -24,6 +27,10 @@ class _CanvasViewState extends State<CanvasView> {
   final DrawingDatabase _drawingDb = DrawingDatabase.instance;
 
   late final importedDrawing = widget.importedDrawing;
+
+  double _colorOpacity = 1.0;
+
+  Color _activeColor = Colors.black;
 
   static List colorsList = [
     // Reds
@@ -211,7 +218,17 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   void setColor(Color color) {
-    _controller.setStyle(color: color);
+    setState(() {
+      _activeColor = color;
+    });
+    _controller.setStyle(color: _activeColor.withOpacity(_colorOpacity));
+  }
+
+  void setOpacity(double value) {
+    setState(() {
+      _colorOpacity = value.clamp(0, 1);
+    });
+    _controller.setStyle(color: _activeColor.withOpacity(value));
   }
 
   void displayColorPicker() {
@@ -235,220 +252,249 @@ class _CanvasViewState extends State<CanvasView> {
                     ),
                   )),
               contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                          tooltip: colorsList[0][1],
-                          onPressed: () => {Navigator.pop(context, 0)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[0][2]),
-                      IconButton(
-                          tooltip: colorsList[1][1],
-                          onPressed: () => {Navigator.pop(context, 1)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[1][2]),
-                      IconButton(
-                          tooltip: colorsList[2][1],
-                          onPressed: () => {Navigator.pop(context, 2)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[2][2]),
-                      IconButton(
-                          tooltip: colorsList[3][1],
-                          onPressed: () => {Navigator.pop(context, 3)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[3][2]),
-                      IconButton(
-                          tooltip: colorsList[4][1],
-                          onPressed: () => {Navigator.pop(context, 4)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[4][2])
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          tooltip: colorsList[5][1],
-                          onPressed: () => {Navigator.pop(context, 5)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[5][2]),
-                      IconButton(
-                          tooltip: colorsList[6][1],
-                          onPressed: () => {Navigator.pop(context, 6)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[6][2]),
-                      IconButton(
-                          tooltip: colorsList[7][1],
-                          onPressed: () => {Navigator.pop(context, 7)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[7][2]),
-                      IconButton(
-                          tooltip: colorsList[8][1],
-                          onPressed: () => {Navigator.pop(context, 8)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[8][2]),
-                      IconButton(
-                          tooltip: colorsList[9][1],
-                          onPressed: () => {Navigator.pop(context, 9)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[9][2])
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          tooltip: colorsList[10][1],
-                          onPressed: () => {Navigator.pop(context, 10)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[10][2]),
-                      IconButton(
-                          tooltip: colorsList[11][1],
-                          onPressed: () => {Navigator.pop(context, 11)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[11][2]),
-                      IconButton(
-                          tooltip: colorsList[12][1],
-                          onPressed: () => {Navigator.pop(context, 12)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[12][2]),
-                      IconButton(
-                          tooltip: colorsList[13][1],
-                          onPressed: () => {Navigator.pop(context, 13)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[13][2]),
-                      IconButton(
-                          tooltip: colorsList[14][1],
-                          onPressed: () => {Navigator.pop(context, 14)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[14][2])
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          tooltip: colorsList[15][1],
-                          onPressed: () => {Navigator.pop(context, 15)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[15][2]),
-                      IconButton(
-                          tooltip: colorsList[16][1],
-                          onPressed: () => {Navigator.pop(context, 16)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[16][2]),
-                      IconButton(
-                          tooltip: colorsList[17][1],
-                          onPressed: () => {Navigator.pop(context, 17)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[17][2]),
-                      IconButton(
-                          tooltip: colorsList[18][1],
-                          onPressed: () => {Navigator.pop(context, 18)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[18][2]),
-                      IconButton(
-                          tooltip: colorsList[19][1],
-                          onPressed: () => {Navigator.pop(context, 19)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[19][2])
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          tooltip: colorsList[20][1],
-                          onPressed: () => {Navigator.pop(context, 20)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[20][2]),
-                      IconButton(
-                          tooltip: colorsList[21][1],
-                          onPressed: () => {Navigator.pop(context, 21)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[21][2]),
-                      IconButton(
-                          tooltip: colorsList[22][1],
-                          onPressed: () => {Navigator.pop(context, 22)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[22][2]),
-                      IconButton(
-                          tooltip: colorsList[23][1],
-                          onPressed: () => {Navigator.pop(context, 23)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[23][2]),
-                      IconButton(
-                          tooltip: colorsList[24][1],
-                          onPressed: () => {Navigator.pop(context, 24)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[24][2])
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          tooltip: colorsList[25][1],
-                          onPressed: () => {Navigator.pop(context, 25)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[25][2]),
-                      IconButton(
-                          tooltip: colorsList[26][1],
-                          onPressed: () => {Navigator.pop(context, 26)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[26][2]),
-                      IconButton(
-                          tooltip: colorsList[27][1],
-                          onPressed: () => {Navigator.pop(context, 27)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[27][2]),
-                      IconButton(
-                          tooltip: colorsList[28][1],
-                          onPressed: () => {Navigator.pop(context, 28)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[28][2]),
-                      IconButton(
-                          tooltip: colorsList[29][1],
-                          onPressed: () => {Navigator.pop(context, 29)},
-                          iconSize: 42,
-                          icon: const Icon(Icons.circle),
-                          color: colorsList[29][2])
-                    ],
-                  )
-                ],
-              ));
+              content: StatefulBuilder(
+                  builder: (BuildContext, StateSetter setState) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Active Color: ", style: TextStyle(color: Colors.white, fontSize: 28),),
+                            Icon(Icons.circle, color: _activeColor.withOpacity(_colorOpacity), size: 56,),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: colorsList[0][1],
+                                onPressed: () => {Navigator.pop(context, 0)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[0][2]),
+                            IconButton(
+                                tooltip: colorsList[1][1],
+                                onPressed: () => {Navigator.pop(context, 1)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[1][2]),
+                            IconButton(
+                                tooltip: colorsList[2][1],
+                                onPressed: () => {Navigator.pop(context, 2)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[2][2]),
+                            IconButton(
+                                tooltip: colorsList[3][1],
+                                onPressed: () => {Navigator.pop(context, 3)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[3][2]),
+                            IconButton(
+                                tooltip: colorsList[4][1],
+                                onPressed: () => {Navigator.pop(context, 4)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[4][2])
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: colorsList[5][1],
+                                onPressed: () => {Navigator.pop(context, 5)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[5][2]),
+                            IconButton(
+                                tooltip: colorsList[6][1],
+                                onPressed: () => {Navigator.pop(context, 6)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[6][2]),
+                            IconButton(
+                                tooltip: colorsList[7][1],
+                                onPressed: () => {Navigator.pop(context, 7)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[7][2]),
+                            IconButton(
+                                tooltip: colorsList[8][1],
+                                onPressed: () => {Navigator.pop(context, 8)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[8][2]),
+                            IconButton(
+                                tooltip: colorsList[9][1],
+                                onPressed: () => {Navigator.pop(context, 9)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[9][2])
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: colorsList[10][1],
+                                onPressed: () => {Navigator.pop(context, 10)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[10][2]),
+                            IconButton(
+                                tooltip: colorsList[11][1],
+                                onPressed: () => {Navigator.pop(context, 11)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[11][2]),
+                            IconButton(
+                                tooltip: colorsList[12][1],
+                                onPressed: () => {Navigator.pop(context, 12)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[12][2]),
+                            IconButton(
+                                tooltip: colorsList[13][1],
+                                onPressed: () => {Navigator.pop(context, 13)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[13][2]),
+                            IconButton(
+                                tooltip: colorsList[14][1],
+                                onPressed: () => {Navigator.pop(context, 14)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[14][2])
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: colorsList[15][1],
+                                onPressed: () => {Navigator.pop(context, 15)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[15][2]),
+                            IconButton(
+                                tooltip: colorsList[16][1],
+                                onPressed: () => {Navigator.pop(context, 16)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[16][2]),
+                            IconButton(
+                                tooltip: colorsList[17][1],
+                                onPressed: () => {Navigator.pop(context, 17)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[17][2]),
+                            IconButton(
+                                tooltip: colorsList[18][1],
+                                onPressed: () => {Navigator.pop(context, 18)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[18][2]),
+                            IconButton(
+                                tooltip: colorsList[19][1],
+                                onPressed: () => {Navigator.pop(context, 19)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[19][2])
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: colorsList[20][1],
+                                onPressed: () => {Navigator.pop(context, 20)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[20][2]),
+                            IconButton(
+                                tooltip: colorsList[21][1],
+                                onPressed: () => {Navigator.pop(context, 21)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[21][2]),
+                            IconButton(
+                                tooltip: colorsList[22][1],
+                                onPressed: () => {Navigator.pop(context, 22)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[22][2]),
+                            IconButton(
+                                tooltip: colorsList[23][1],
+                                onPressed: () => {Navigator.pop(context, 23)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[23][2]),
+                            IconButton(
+                                tooltip: colorsList[24][1],
+                                onPressed: () => {Navigator.pop(context, 24)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[24][2])
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: colorsList[25][1],
+                                onPressed: () => {Navigator.pop(context, 25)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[25][2]),
+                            IconButton(
+                                tooltip: colorsList[26][1],
+                                onPressed: () => {Navigator.pop(context, 26)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[26][2]),
+                            IconButton(
+                                tooltip: colorsList[27][1],
+                                onPressed: () => {Navigator.pop(context, 27)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[27][2]),
+                            IconButton(
+                                tooltip: colorsList[28][1],
+                                onPressed: () => {Navigator.pop(context, 28)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[28][2]),
+                            IconButton(
+                                tooltip: colorsList[29][1],
+                                onPressed: () => {Navigator.pop(context, 29)},
+                                iconSize: 42,
+                                icon: const Icon(Icons.circle),
+                                color: colorsList[29][2])
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text("Opacity: ${(_colorOpacity * 100).toInt()}", style: const TextStyle(fontSize: 28,color: Colors.white),),
+                            Slider(
+                              activeColor: Colors.blue.shade600,
+                              min: 0.0,
+                              max: 1.0,
+                              divisions: 100,
+                              value: _colorOpacity,
+                              label: (100 * _colorOpacity).toInt().toString(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _colorOpacity = value;
+                                });
+                                _controller.setStyle(color: _activeColor.withOpacity(_colorOpacity));
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  }));
         }).then((colorChoice) {
       if (colorChoice == null) return;
-
-      _controller.setStyle(color: colorsList[colorChoice][2]);
+      Color color = colorsList[colorChoice][2];
+      setColor(color);
     });
   }
 
@@ -617,7 +663,7 @@ class _CanvasViewState extends State<CanvasView> {
                   0,
                   DefToolItem(
                     icon: Icons.color_lens_rounded,
-                    color: Colors.blue.shade300,
+                    color: Colors.blue.shade500,
                     onTap: () => displayColorPicker(),
                     iconSize: 48,
                     isActive: false,
