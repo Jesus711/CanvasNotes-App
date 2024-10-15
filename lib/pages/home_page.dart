@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   void _createNewCanvas() async {
     bool? drawingSaved = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CanvasView()));
+        context, MaterialPageRoute(builder: (context) => const CanvasView()));
     setState(() {});
   }
 
@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context) => CanvasView(
                   importedDrawing: loadDrawing,
                 )));
+    setState(() {});
   }
 
   void _deleteCanvas(drawingID) async {
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               Drawing drawing = snapshot.data![index];
               return Padding(
-                  padding: const EdgeInsets.fromLTRB(2, 6, 2, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: Slidable(
                       endActionPane:
                           ActionPane(
@@ -124,7 +125,7 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),
         ),
       ),
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: const Color.fromRGBO(64, 64, 64, 0.5),
       body: _drawingList(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
@@ -152,7 +153,7 @@ class EmptyList extends StatelessWidget {
             ),
             child: Text(
               'Click on the + Icon to create a Canvas to start drawing',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+              style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             )));
   }
