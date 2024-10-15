@@ -1,3 +1,4 @@
+import "dart:convert";
 import "dart:typed_data";
 
 import "package:canvas_notes_flutter/database/drawing_db.dart";
@@ -17,7 +18,7 @@ class CanvasView extends StatefulWidget {
   State<CanvasView> createState() => _CanvasViewState();
 }
 
-class _CanvasViewState extends State<CanvasView> {
+class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateMixin {
   final DrawingController _controller = DrawingController();
   final _nameController = TextEditingController();
 
@@ -506,8 +507,62 @@ class _CanvasViewState extends State<CanvasView> {
     });
   }
 
+  void saveDrawingChanges(BuildContext context) async {
+
+    print("HERE");
+
+    print(importedDrawing!.ID);
+    _drawingDb.updateDrawing(importedDrawing!.ID, _convertImageToJson());
+
+
+    final snackBar = SnackBar(
+      content: const Text('Changes Saved!', style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+      duration: const Duration(milliseconds: 1100), // Duration the snack bar will be shown
+      behavior: SnackBarBehavior.floating, // Makes the SnackBar float
+      margin: const EdgeInsets.all(16.0), // Adds margin to the SnackBar
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0), // Rounded corners
+      ),
+    );
+
+    // Show the SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+  }
+
+
+  void drawImportedDrawing() {
+    List<dynamic> drawingSteps = jsonDecode(importedDrawing!.drawingJSON) as List<dynamic>;
+
+    List<Map<String, dynamic>> lines = drawingSteps.cast<Map<String, dynamic>>();
+
+
+    for(var i = 0; i < lines.length; i++){
+      String lineType = lines[i]["type"];
+      if (lineType == "SimpleLine"){
+        _controller.addContent(SimpleLine.fromJson(lines[i]));
+      } else if (lineType == "SmoothLine"){
+        _controller.addContent(SmoothLine.fromJson(lines[i]));
+      } else if (lineType == "StraigtLine"){
+        _controller.addContent(StraightLine.fromJson(lines[i]));
+      } else if (lineType == "Rectangle"){
+        _controller.addContent(Rectangle.fromJson(lines[i]));
+      } else if (lineType == "Circle"){
+        _controller.addContent(Circle.fromJson(lines[i]));
+      } else if (lineType == "Eraser"){
+        _controller.addContent(Eraser.fromJson(lines[i]));
+      }
+    }
+  }
+
+  String _convertImageToJson() {
+    String jsonData = jsonEncode(_controller.getJsonList());
+    return jsonData;
+  }
+
   Future<void> _getImageData() async {
     _nameController.text = "";
+    _convertImageToJson();
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -591,7 +646,9 @@ class _CanvasViewState extends State<CanvasView> {
         Uint8List? drawingData =
             (await _controller.getImageData())?.buffer.asUint8List();
 
-        _drawingDb.addDrawing(name, drawingData!);
+        String drawingJSON = _convertImageToJson();
+
+        _drawingDb.addDrawing(name, drawingJSON);
         Navigator.pop(context, true);
       }
     });
@@ -600,6 +657,9 @@ class _CanvasViewState extends State<CanvasView> {
   @override
   void initState() {
     super.initState();
+    if(importedDrawing != null){
+      drawImportedDrawing();
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setDrawingBoardStyles();
     });
@@ -615,25 +675,27 @@ class _CanvasViewState extends State<CanvasView> {
         appBar: AppBar(
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 10),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue.shade800, elevation: 0),
-                  onPressed: _getImageData,
-                  child: const Row(
+                  onPressed: importedDrawing != null ? () =>
+                  {saveDrawingChanges(context)}
+                      : _getImageData,
+                  child: Row(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(
                           Icons.save,
-                          size: 32,
+                          size: 28,
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        "Save",
-                        style: TextStyle(
-                            fontSize: 24,
+                        importedDrawing != null ? "Save Changes" : "Save",
+                        style: const TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.w500,
                             color: Colors.white),
                       )
@@ -653,14 +715,7 @@ class _CanvasViewState extends State<CanvasView> {
           children: [
             DrawingBoard(
                 controller: _controller,
-                background: importedDrawing != null
-                    ? Image.memory(
-                        width: 1000,
-                        height: 1000,
-                        importedDrawing!.drawingData,
-                        fit: BoxFit.contain,
-                      )
-                    : Container(width: 1000, height: 1000, color: Colors.white),
+                background: Container(width: 1000, height: 1000, color: Colors.white),
                 showDefaultActions: true,
 
                 /// Enable default action options
