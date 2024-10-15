@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:sqflite/sqflite.dart';
@@ -39,7 +40,7 @@ class DrawingDatabase {
         Create Table IF Not Exists Drawing(
           ID Integer Primary Key,
           drawingName Text NOT NULL,
-          drawingData Blob NOT NULL
+          drawingJSON Text NOT NULL
         );
         """)
         }
@@ -48,11 +49,11 @@ class DrawingDatabase {
   }
 
 
-  void addDrawing(String name, Uint8List data) async {
+  void addDrawing(String name, String jsonData) async {
     final db = await database;
     db.insert("Drawing", {
       "drawingName": name,
-      "drawingData": data,
+      "drawingJSON": jsonData
     });
   }
 
@@ -61,23 +62,27 @@ class DrawingDatabase {
     db.delete("Drawing", where: "id = ?", whereArgs: [drawingID]);
   }
 
-  void updateDrawing() {
+  void updateDrawing(int drawingID, String jsonChanges) async {
+    final db = await database;
+    db.update("Drawing", {
+      "drawingJSON": jsonChanges,
+    } , where: "id = ?", whereArgs: [drawingID]);
+
+    print("Drawing Updated");
 
   }
 
   Future<List<Drawing>> getDrawings() async {
     final db = await database;
     final data = await db.query("Drawing");
-    print(data);
+
     List<Drawing> drawings = data.
       map((drawing) =>
         Drawing(
           ID: drawing["ID"] as int,
           drawingName: drawing["drawingName"] as String,
-          drawingData: drawing["drawingData"] as Uint8List)
+          drawingJSON: drawing["drawingJSON"] as String)
     ).toList();
-
-
 
     return drawings;
   }
