@@ -21,9 +21,91 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _createNewCanvas() async {
-    bool? drawingSaved = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const CanvasView()));
-    setState(() {});
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Choose Canvas Size", textAlign: TextAlign.center, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                        backgroundColor: Colors.blue.shade800,
+                        elevation: 8,
+                      ),
+                      onPressed: () => {Navigator.pop(context, 1000)},
+                      child: const Text("1000x1000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      backgroundColor: Colors.blue.shade800,
+                      elevation: 8,
+                    ),
+                      onPressed: () => {Navigator.pop(context, 2000)},
+                      child: const Text("2000x2000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      backgroundColor: Colors.blue.shade800,
+                      elevation: 8,
+                    ),
+                      onPressed: () => {Navigator.pop(context, 3000)},
+                      child: const Text("3000x3000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      backgroundColor: Colors.blue.shade800,
+                      elevation: 8,
+                    ),
+                      onPressed: () => {Navigator.pop(context, 4000)},
+                      child: const Text("4000x4000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      backgroundColor: Colors.blue.shade800,
+                      elevation: 8,
+                    ),
+                      onPressed: () => {Navigator.pop(context, 5000)},
+                      child: const Text("5000x5000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                )
+              ],
+            ),
+          );
+        }
+    ).then((selectedSize) async {
+      if (selectedSize  == null) return;
+
+      bool? created = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CanvasView(
+                canvasSize: selectedSize,
+              )));
+      setState(() {});
+
+    });
+
+
+
   }
 
   void _openSavedCanvas(Drawing loadDrawing) async {
@@ -32,6 +114,7 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(
             builder: (context) => CanvasView(
                   importedDrawing: loadDrawing,
+                  canvasSize: loadDrawing.canvasSize
                 )));
     setState(() {});
   }
