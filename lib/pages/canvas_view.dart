@@ -7,22 +7,25 @@ import "package:flutter_drawing_board/paint_contents.dart";
 import "../models/drawing.dart";
 
 class CanvasView extends StatefulWidget {
-  const CanvasView({super.key, this.importedDrawing});
+  const CanvasView({super.key, this.importedDrawing, required this.canvasSize});
 
   final Drawing? importedDrawing;
+  final int canvasSize;
 
   @override
   State<CanvasView> createState() => _CanvasViewState();
 }
 
-class _CanvasViewState extends State<CanvasView>
-    with SingleTickerProviderStateMixin {
+class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateMixin {
+
   final DrawingController _controller = DrawingController();
   final _nameController = TextEditingController();
 
   final DrawingDatabase _drawingDb = DrawingDatabase.instance;
 
   late final importedDrawing = widget.importedDrawing;
+
+  late int canvasSize = widget.canvasSize;
 
   double _colorOpacity = 1.0;
 
@@ -658,7 +661,7 @@ class _CanvasViewState extends State<CanvasView>
 
         DateTime now = DateTime.now();
         String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute}";
-        _drawingDb.addDrawing(name, drawingJSON, 1000, createdDate, "");
+        _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, "");
         Navigator.pop(context, true);
       }
     });
@@ -729,11 +732,11 @@ class _CanvasViewState extends State<CanvasView>
                   controller: _controller,
                   //TODO: Idea: when user presses create, allow options of small (500x500), medium(1000x1000), large(2000x2000)
                   background: Container(
-                      width: 1000, height: 1000, decoration: BoxDecoration(
+                      width: canvasSize * 1.0, height: canvasSize * 1.0, decoration: BoxDecoration(
                     color: _backgroundColor,
-                    border: Border.all(color: Colors.red, width: 4)
+                    border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 4)
                   ),),
-                  boardBoundaryMargin: EdgeInsets.all(deviceWidth * 1.2),
+                  boardBoundaryMargin: EdgeInsets.all(deviceWidth * (canvasSize / 1000)),
                   showDefaultActions: true,
                   minScale: 0.05,
                   transformationController: _transformationController,
@@ -785,7 +788,7 @@ class _CanvasViewState extends State<CanvasView>
                         style: TextStyle(
                             color: _backgroundColor == Colors.white
                                 ? Colors.black
-                                : Colors.white,
+                                : Colors.blue,
                             fontSize: 22,
                             fontWeight: FontWeight.w500),
                       ),
@@ -793,7 +796,7 @@ class _CanvasViewState extends State<CanvasView>
                       _backgroundColor == Colors.black ?
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.blue,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Icon(
