@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:developer';
 
 import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:sqflite/sqflite.dart';
@@ -40,7 +39,10 @@ class DrawingDatabase {
         Create Table IF Not Exists Drawing(
           ID Integer Primary Key,
           drawingName Text NOT NULL,
-          drawingJSON Text NOT NULL
+          drawingJSON Text NOT NULL,
+          canvasSize Integer,
+          createdAtDate Text NOT NULL,
+          lastModifiedDate Text NOT NULL
         );
         """)
         }
@@ -49,12 +51,17 @@ class DrawingDatabase {
   }
 
 
-  void addDrawing(String name, String jsonData) async {
+  void addDrawing(String name, String jsonData, int size, String createdDate, String? lastModifiedDate) async {
     final db = await database;
     db.insert("Drawing", {
-      "drawingName": name,
-      "drawingJSON": jsonData
+    "drawingName": name,
+    "drawingJSON": jsonData,
+    "canvasSize" : size,
+    "createdAtDate" : createdDate,
+    "lastModifiedDate" : lastModifiedDate
     });
+
+    log("Drawing Added");
   }
 
   void deleteDrawing(int drawingID) async {
@@ -62,13 +69,14 @@ class DrawingDatabase {
     db.delete("Drawing", where: "id = ?", whereArgs: [drawingID]);
   }
 
-  void updateDrawing(int drawingID, String jsonChanges) async {
+  void updateDrawing(int drawingID, String jsonChanges, String modifiedDate) async {
     final db = await database;
     db.update("Drawing", {
       "drawingJSON": jsonChanges,
+      "lastModifiedDate" : modifiedDate,
     } , where: "id = ?", whereArgs: [drawingID]);
 
-    print("Drawing Updated");
+    log("Drawing Updated");
 
   }
 
@@ -81,7 +89,11 @@ class DrawingDatabase {
         Drawing(
           ID: drawing["ID"] as int,
           drawingName: drawing["drawingName"] as String,
-          drawingJSON: drawing["drawingJSON"] as String)
+          drawingJSON: drawing["drawingJSON"] as String,
+          canvasSize: drawing["canvasSize"] as int,
+          createdAtDate: drawing["createdAtDate"] as String,
+          lastModifiedDate: drawing["lastModifiedDate"] as String,
+        )
     ).toList();
 
     return drawings;
