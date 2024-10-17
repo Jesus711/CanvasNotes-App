@@ -33,6 +33,8 @@ class _CanvasViewState extends State<CanvasView>
 
   Color _backgroundColor = Colors.white;
 
+  TransformationController _transformationController = TransformationController();
+
   static List colorsList = [
     // Reds
     [0, "Red", Colors.red.shade600],
@@ -546,7 +548,8 @@ class _CanvasViewState extends State<CanvasView>
         _controller.addContent(SimpleLine.fromJson(lines[i]));
       } else if (lineType == "SmoothLine") {
         _controller.addContent(SmoothLine.fromJson(lines[i]));
-      } else if (lineType == "StraigtLine") {
+        // Fixed misspelling with straight line
+      } else if (lineType == "StraightLine") {
         _controller.addContent(StraightLine.fromJson(lines[i]));
       } else if (lineType == "Rectangle") {
         _controller.addContent(Rectangle.fromJson(lines[i]));
@@ -666,6 +669,7 @@ class _CanvasViewState extends State<CanvasView>
     if (importedDrawing != null) {
       drawImportedDrawing();
     }
+    _transformationController.value = Matrix4.identity()..scale(0.8);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setDrawingBoardStyles();
     });
@@ -724,12 +728,16 @@ class _CanvasViewState extends State<CanvasView>
                   controller: _controller,
                   //TODO: Idea: when user presses create, allow options of small (500x500), medium(1000x1000), large(2000x2000)
                   background: Container(
-                      width: 1000, height: 1000, color: _backgroundColor),
+                      width: 1000, height: 1000, decoration: BoxDecoration(
+                    color: _backgroundColor,
+                    border: Border.all(color: Colors.red, width: 4)
+                  ),),
+                  boardBoundaryMargin: EdgeInsets.all(deviceWidth * 1.2),
                   showDefaultActions: true,
-
+                  minScale: 0.05,
+                  transformationController: _transformationController,
                   /// Enable default action options
                   showDefaultTools: true,
-
                   /// Enable default toolbar
                   boardClipBehavior: Clip.hardEdge,
                   clipBehavior: Clip.antiAlias,
@@ -755,6 +763,11 @@ class _CanvasViewState extends State<CanvasView>
                                     _backgroundColor == Colors.white
                                         ? Colors.black
                                         : Colors.white;
+                                if (_activeColor == Colors.black){
+                                  setColor(Colors.white);
+                                } else if (_activeColor == Colors.white) {
+                                  setColor(Colors.black);
+                                }
                               })
                             },
                             iconSize: 42,
