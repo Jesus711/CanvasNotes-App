@@ -3,20 +3,10 @@ import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:canvas_notes_flutter/pages/canvas_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-//import 'package:flutter_drawing_board/paint_contents.dart';
-//import 'package:canvas_notes_flutter/pages/draw_view.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
-// This widget is the home page of your application. It is stateful, meaning
-// that it has a State object (defined below) that contains fields that affect
-// how it looks.
-
-// This class is the configuration for the state. It holds the values (in this
-// case the title) provided by the parent (in this case the App widget) and
-// used by the build method of the State. Fields in a Widget subclass are
-// always marked "final".
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,8 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static final DrawingDatabase _drawingDb = DrawingDatabase.instance;
-
-  List<Drawing> drawingsList = [];
 
   @override
   void initState() {
@@ -93,20 +81,46 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                drawing.drawingName,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    drawing.drawingName == "Untitled" ?
+                                    "${drawing.drawingName}${drawing.ID}" :
+                                    drawing.drawingName
+                                    ,
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    "Size: ${drawing.canvasSize}x${drawing.canvasSize}",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    drawing.lastModifiedDate == "" ? "Created On: ${drawing.createdAtDate}" : "Last Modified: ${drawing.lastModifiedDate}",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                ],
                               ),
                               ElevatedButton(
                                   onPressed: () => {_openSavedCanvas(drawing)},
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green.shade700),
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                      backgroundColor: Colors.white,
+                                      elevation: 8,
+                                  ),
                                   child: const Text("Open",
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 20)))
+                                          color: Colors.black, fontSize: 20)))
                             ],
                           ))));
             });

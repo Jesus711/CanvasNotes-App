@@ -1,8 +1,5 @@
 import "dart:convert";
-import "dart:typed_data";
-
 import "package:canvas_notes_flutter/database/drawing_db.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_drawing_board/flutter_drawing_board.dart";
 import "package:flutter_drawing_board/paint_contents.dart";
@@ -33,7 +30,7 @@ class _CanvasViewState extends State<CanvasView>
 
   Color _backgroundColor = Colors.white;
 
-  TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController = TransformationController();
 
   static List colorsList = [
     // Reds
@@ -514,7 +511,9 @@ class _CanvasViewState extends State<CanvasView>
   }
 
   void saveDrawingChanges(BuildContext context) async {
-    _drawingDb.updateDrawing(importedDrawing!.ID, _convertImageToJson());
+    DateTime now = DateTime.now();
+    String modifiedDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute}";
+    _drawingDb.updateDrawing(importedDrawing!.ID, _convertImageToJson(), modifiedDate,);
 
     final snackBar = SnackBar(
       content: const Text(
@@ -657,7 +656,9 @@ class _CanvasViewState extends State<CanvasView>
 
         String drawingJSON = _convertImageToJson();
 
-        _drawingDb.addDrawing(name, drawingJSON);
+        DateTime now = DateTime.now();
+        String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute}";
+        _drawingDb.addDrawing(name, drawingJSON, 1000, createdDate, "");
         Navigator.pop(context, true);
       }
     });
