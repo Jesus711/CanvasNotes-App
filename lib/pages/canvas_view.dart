@@ -1,8 +1,12 @@
 import "dart:convert";
+import "dart:io";
+import "dart:typed_data";
 import "package:canvas_notes_flutter/database/drawing_db.dart";
 import "package:flutter/material.dart";
 import "package:flutter_drawing_board/flutter_drawing_board.dart";
 import "package:flutter_drawing_board/paint_contents.dart";
+import "package:permission_handler/permission_handler.dart";
+import "package:path_provider/path_provider.dart";
 
 import "../models/drawing.dart";
 
@@ -567,6 +571,105 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     return jsonData;
   }
 
+  void resetCanvas() {
+    _transformationController.value = Matrix4.identity();
+  }
+
+  void displayFullCanvas() async {
+    Uint8List? data = (await _controller.getImageData())?.buffer.asUint8List();
+    if (data == null) {
+      debugPrint('Error');
+      return;
+    }
+
+    if (mounted) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext c) {
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+              onTap: () => Navigator.pop(c),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.memory(data),
+                  ),
+                  ElevatedButton(
+                      onPressed: () => {_downloadImage(data)},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade600
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Download Drawing", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.save_alt, size: 32, color: Colors.white,),
+                          )
+                        ],
+                      )
+                  )
+                ],
+              )),
+          );
+      });
+    }
+  }
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      return result == PermissionStatus.granted;
+    }
+  }
+
+  Future<void> _downloadImage(Uint8List imageBytes) async {
+    try {
+      // Request storage permission
+      if (await _requestPermission(Permission.manageExternalStorage)) {
+        // Get the directory to save the image
+        final directory = await getExternalStorageDirectory();
+        if (directory != null) {
+          String path = "/storage/emulated/0/Download";
+          DateTime now = DateTime.now();
+          String createdDate = "${now.month}${now.day}${now.year}${now.hour}${now.minute}${now.second}";
+          String filePath = "$path/newDrawing_$createdDate.png";
+
+          if (importedDrawing != null){
+            filePath = '$path/${importedDrawing!.drawingName == "Untitled" ? "${importedDrawing!.drawingName}${importedDrawing!.ID}" : importedDrawing!.drawingName}.png'; // File path
+          }
+
+
+          // Save the image to a file
+          File file = File(filePath);
+          await file.writeAsBytes(imageBytes);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Image saved to $filePath')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Storage permission denied')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save image: $e')),
+      );
+    }
+  }
+
+
   Future<void> _getImageData() async {
     _nameController.text = "";
 
@@ -688,31 +791,43 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade800, elevation: 0),
-                  onPressed: importedDrawing != null
-                      ? () => {saveDrawingChanges(context)}
-                      : _getImageData,
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.save,
-                          size: 28,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        importedDrawing != null ? "Save Changes" : "Save",
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade800, elevation: 0),
+                      onPressed: importedDrawing != null
+                          ? () => {saveDrawingChanges(context)}
+                          : _getImageData,
+                      child: const Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.save,
+                              size: 28,
+                              color: Colors.white,
+                            ),
+                          ),
+                          // Text(
+                          //   importedDrawing != null ? "Save Changes" : "Save",
+                          //   style: const TextStyle(
+                          //       fontSize: 18,
+                          //       fontWeight: FontWeight.w500,
+                          //       color: Colors.white),
+                          // ),
+                        ],
                       )
-                    ],
-                  )),
+                  ),
+                  ElevatedButton(onPressed: () => {resetCanvas()},
+                      child: const Icon(Icons.restore_page_outlined)),
+                  ElevatedButton(onPressed: () => {displayFullCanvas()},
+                      child: const Icon(Icons.image_search)),
+                  ElevatedButton(
+                      onPressed: () => {},
+                      child: const Icon(Icons.menu)),
+                ],
+              ),
             )
           ],
           foregroundColor: Colors.white,
@@ -729,11 +844,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
             children: [
               DrawingBoard(
                   controller: _controller,
-                  //TODO: Idea: when user presses create, allow options of small (500x500), medium(1000x1000), large(2000x2000)
                   background: Container(
                       width: canvasSize * 1.0, height: canvasSize * 1.0, decoration: BoxDecoration(
                     color: _backgroundColor,
-                    border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 2)
+                    //border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 2)
                   ),),
                   boardBoundaryMargin: EdgeInsets.all(deviceWidth * (canvasSize / 1000)),
                   showDefaultActions: true,
