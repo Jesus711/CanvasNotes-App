@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Choose Canvas Size", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
+            backgroundColor: Colors.white.withOpacity(0.8),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,80 +134,76 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.data == null || snapshot.data!.isEmpty) {
           return const EmptyList();
         }
-        return ListView.builder(
-            itemCount: snapshot.data?.length ?? 0,
-            itemBuilder: (context, index) {
-              Drawing drawing = snapshot.data![index];
-              return Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
-                  child: Slidable(
-                      endActionPane:
-                          ActionPane(
-                              motion: const StretchMotion(),
-                              extentRatio: 0.3,
-                              children: [
-                                SlidableAction(
-                                  onPressed: (value) => {_deleteCanvas(drawing.ID)},
-                                  icon: Icons.delete,
-                                  borderRadius: BorderRadius.circular(15),
-                                  backgroundColor: Colors.red,
-                                )
-                      ]),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.blue.shade600,
-                              borderRadius: BorderRadius.circular(12),
+        return Column(
+          children: [
+            const Text("Tap to Open Canvas", style: TextStyle(color: Colors.white, fontSize: 20)),
+            Expanded(
+              child: ListView.builder(
+                itemCount: snapshot.data?.length ?? 0,
+                itemBuilder: (context, index) {
+                  Drawing drawing = snapshot.data![index];
+                  return Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                      child: Slidable(
+                          endActionPane:
+                              ActionPane(
+                                  motion: const StretchMotion(),
+                                  extentRatio: 0.3,
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (value) => {_deleteCanvas(drawing.ID)},
+                                      icon: Icons.delete,
+                                      borderRadius: BorderRadius.circular(15),
+                                      backgroundColor: Colors.red,
+                                    )
+                          ]),
+                          child: ElevatedButton(
+                            onPressed: () => {_openSavedCanvas(drawing)},
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  backgroundColor: Colors.blue.shade600,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
                               ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 20,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    drawing.drawingName == "Untitled" ?
-                                    "${drawing.drawingName}${drawing.ID}" :
-                                    drawing.drawingName
-                                    ,
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        drawing.drawingName == "Untitled" ?
+                                        "${drawing.drawingName}${drawing.ID}" :
+                                        drawing.drawingName
+                                        ,
+                                        style: const TextStyle(
+                                            fontSize: 24,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        "Size: ${drawing.canvasSize}x${drawing.canvasSize}",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        drawing.lastModifiedDate == "" ? "Created On: ${drawing.createdAtDate}" : "Last Modified: ${drawing.lastModifiedDate}",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    "Size: ${drawing.canvasSize}x${drawing.canvasSize}",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(
-                                    drawing.lastModifiedDate == "" ? "Created On: ${drawing.createdAtDate}" : "Last Modified: ${drawing.lastModifiedDate}",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500),
-                                  )
+                                  const Icon(Icons.image_sharp, color: Colors.white, size: 48,)
                                 ],
-                              ),
-                              ElevatedButton(
-                                  onPressed: () => {_openSavedCanvas(drawing)},
-                                  style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                      backgroundColor: Colors.white,
-                                      elevation: 8,
-                                  ),
-                                  child: const Text("Open",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 20)))
-                            ],
-                          ))));
-            });
+                              ))));
+                }),
+            )
+          ],
+        );
       },
     );
   }
