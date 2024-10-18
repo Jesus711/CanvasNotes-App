@@ -21,8 +21,8 @@ class CanvasView extends StatefulWidget {
   State<CanvasView> createState() => _CanvasViewState();
 }
 
-class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateMixin {
-
+class _CanvasViewState extends State<CanvasView>
+    with SingleTickerProviderStateMixin {
   final DrawingController _controller = DrawingController();
   final _nameController = TextEditingController();
 
@@ -38,7 +38,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
   Color _backgroundColor = Colors.white;
 
-  final TransformationController _transformationController = TransformationController();
+  bool _showDrawTools = true;
+
+  final TransformationController _transformationController =
+      TransformationController();
 
   static List colorsList = [
     // Reds
@@ -246,7 +249,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         builder: (BuildContext context) {
           return AlertDialog(
               titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              backgroundColor: _backgroundColor == Colors.black? Colors.white70 : Colors.black45,
+              backgroundColor: _backgroundColor == Colors.black
+                  ? Colors.white70
+                  : Colors.black45,
               title: Container(
                   decoration: BoxDecoration(
                       color: Colors.blue.shade700,
@@ -272,7 +277,12 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       children: [
                         Text(
                           "Active Color: ",
-                          style: TextStyle(color: _backgroundColor == Colors.black ? Colors.black : Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: _backgroundColor == Colors.black
+                                  ? Colors.black
+                                  : Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600),
                         ),
                         Icon(
                           Icons.circle,
@@ -487,10 +497,13 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     ),
                     Column(
                       children: [
-                        Text(
-                          "Opacity: ${(_colorOpacity * 100).toInt()}",
-                            style: TextStyle(color: _backgroundColor == Colors.black ? Colors.black : Colors.white, fontSize: 24, fontWeight: FontWeight.w700)
-                        ),
+                        Text("Opacity: ${(_colorOpacity * 100).toInt()}",
+                            style: TextStyle(
+                                color: _backgroundColor == Colors.black
+                                    ? Colors.black
+                                    : Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700)),
                         Slider(
                           activeColor: Colors.blue.shade600,
                           min: 0.0,
@@ -519,8 +532,13 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   void saveDrawingChanges(BuildContext context) async {
     DateTime now = DateTime.now();
     //TODO: Issue found on time format time 8:07pm -> 20:7, need to fixed to include leading 0 if minutes < 10
-    String modifiedDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
-    _drawingDb.updateDrawing(importedDrawing!.ID, _convertImageToJson(), modifiedDate,);
+    String modifiedDate =
+        "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
+    _drawingDb.updateDrawing(
+      importedDrawing!.ID,
+      _convertImageToJson(),
+      modifiedDate,
+    );
 
     final snackBar = SnackBar(
       content: const Text(
@@ -585,42 +603,50 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
     if (mounted) {
       showDialog<void>(
-        context: context,
-        builder: (BuildContext c) {
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-              onTap: () => Navigator.pop(c),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.memory(data),
-                  ),
-                  ElevatedButton(
-                      onPressed: () => {_downloadImage(data)},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade600
+          context: context,
+          builder: (BuildContext c) {
+            return Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  onTap: () => Navigator.pop(c),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.memory(data),
                       ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.save_alt, size: 32, color: Colors.white,),
-                          ),
-                          Text("Download Drawing", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),),
-                        ],
-                      )
-                  )
-                ],
-              )),
-          );
-      });
+                      ElevatedButton(
+                          onPressed: () => {_downloadImage(data)},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade600),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.save_alt,
+                                  size: 32,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Download Drawing",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ))
+                    ],
+                  )),
+            );
+          });
     }
   }
 
@@ -642,13 +668,14 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         if (directory != null) {
           String path = "/storage/emulated/0/Download";
           DateTime now = DateTime.now();
-          String createdDate = "${now.month}${now.day}${now.year}${now.hour}${now.minute}${now.second}";
+          String createdDate =
+              "${now.month}${now.day}${now.year}${now.hour}${now.minute}${now.second}";
           String filePath = "$path/newDrawing_$createdDate.png";
 
-          if (importedDrawing != null){
-            filePath = '$path/${importedDrawing!.drawingName == "Untitled" ? "${importedDrawing!.drawingName}${importedDrawing!.ID}" : importedDrawing!.drawingName}.png'; // File path
+          if (importedDrawing != null) {
+            filePath =
+                '$path/${importedDrawing!.drawingName == "Untitled" ? "${importedDrawing!.drawingName}${importedDrawing!.ID}" : importedDrawing!.drawingName}.png'; // File path
           }
-
 
           // Save the image to a file
           File file = File(filePath);
@@ -669,7 +696,6 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
       );
     }
   }
-
 
   Future<void> _getImageData() async {
     _nameController.text = "";
@@ -763,7 +789,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         String drawingJSON = _convertImageToJson();
 
         DateTime now = DateTime.now();
-        String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
+        String createdDate =
+            "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
         _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, "");
         Navigator.pop(context, true);
       }
@@ -785,42 +812,51 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   Widget canvasMenu(BuildContext context) {
     return PopupMenuButton<int>(
       color: Colors.blue.shade500,
-      icon: const Icon(Icons.menu, size: 32,),
+      icon: const Icon(
+        Icons.menu,
+        size: 32,
+      ),
       onSelected: (int value) async {
-        if (value == 1){
-          log("Value 1");
-          if (importedDrawing != null){
+        if (value == 1) {
+          setState(() {
+            _showDrawTools = !_showDrawTools;
+          });
+        } else if (value == 2) {
+          if (importedDrawing != null) {
             saveDrawingChanges(context);
-          }else{
+          } else {
             _getImageData();
           }
-        }
-        else if (value == 2) {
+        } else if (value == 3) {
           resetCanvas();
-        }
-        else if (value == 3) {
+        } else if (value == 4) {
           displayFullCanvas();
-        }
-        else if (value == 4) {
-          Uint8List? data = (await _controller.getImageData())?.buffer.asUint8List();
+        } else if (value == 5) {
+          Uint8List? data =
+              (await _controller.getImageData())?.buffer.asUint8List();
           if (data == null) {
             debugPrint('Error');
             return;
-        }
+          }
           _downloadImage(data);
         }
       },
-      itemBuilder: (BuildContext context) =>
-      <PopupMenuItem<int>>[
-        const PopupMenuItem<int>(
+      itemBuilder: (BuildContext context) => <PopupMenuItem<int>>[
+        PopupMenuItem<int>(
           value: 1,
           child: Row(
             children: [
-              Padding(
-                padding: EdgeInsets.only(right: 4),
-                child: Icon(Icons.save, size: 32),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Icon(Icons.build, size: 32),
               ),
-              Text("Save Drawing", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+              Text(
+                _showDrawTools ? "Hide Tools" : "Show Tools",
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
             ],
           ),
         ),
@@ -829,10 +865,16 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 4),
-                child: Icon(Icons.restore_page_outlined, size: 32),
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Icon(Icons.save, size: 32),
               ),
-              Text("Reset Position", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+              Text(
+                "Save Drawing",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
             ],
           ),
         ),
@@ -841,24 +883,54 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 4),
-                child: Icon(Icons.image_search, size: 32),
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Icon(Icons.restore_page_outlined, size: 32),
               ),
-              Text("View Full Canvas", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+              Text(
+                "Reset Position",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
             ],
           ),
         ),
         const PopupMenuItem<int>(
           value: 4,
           child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Icon(Icons.image_search, size: 32),
+              ),
+              Text(
+                "View Full Canvas",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 5,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 4),
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                 child: Icon(Icons.save_alt, size: 32),
               ),
-              Text("Download Canvas", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+              Text(
+                "Download Canvas",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
             ],
           ),
         )
@@ -882,7 +954,11 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue.shade800,
           title: Text(
-            importedDrawing != null ? importedDrawing!.drawingName == "Untitled" ? "${importedDrawing!.drawingName}${importedDrawing!.ID}" : importedDrawing!.drawingName : "New Drawing",
+            importedDrawing != null
+                ? importedDrawing!.drawingName == "Untitled"
+                    ? "${importedDrawing!.drawingName}${importedDrawing!.ID}"
+                    : importedDrawing!.drawingName
+                : "New Drawing",
             style: const TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
           ),
@@ -894,16 +970,22 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
               DrawingBoard(
                   controller: _controller,
                   background: Container(
-                      width: canvasSize * 1.0, height: canvasSize * 1.0, decoration: BoxDecoration(
-                    color: _backgroundColor,
-                    //border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 2)
-                  ),),
-                  boardBoundaryMargin: EdgeInsets.all(deviceWidth * (canvasSize / 1000)),
-                  showDefaultActions: true,
+                    width: canvasSize * 1.0,
+                    height: canvasSize * 1.0,
+                    decoration: BoxDecoration(
+                      color: _backgroundColor,
+                      //border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 2)
+                    ),
+                  ),
+                  boardBoundaryMargin:
+                      EdgeInsets.all(deviceWidth * (canvasSize / 1000)),
+                  showDefaultActions: _showDrawTools,
                   minScale: 0.05,
                   transformationController: _transformationController,
+
                   /// Enable default action options
-                  showDefaultTools: true,
+                  showDefaultTools: _showDrawTools,
+
                   /// Enable default toolbar
                   boardClipBehavior: Clip.hardEdge,
                   clipBehavior: Clip.antiAlias,
@@ -921,15 +1003,19 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       ..insert(
                           1,
                           DefToolItem(
-                            icon: _backgroundColor == Colors.white ? Icons.dark_mode : Icons.light_mode,
-                            color: _backgroundColor == Colors.white ? Colors.black : Colors.yellow.shade800,
+                            icon: _backgroundColor == Colors.white
+                                ? Icons.dark_mode
+                                : Icons.light_mode,
+                            color: _backgroundColor == Colors.white
+                                ? Colors.black
+                                : Colors.yellow.shade800,
                             onTap: () => {
                               setState(() {
                                 _backgroundColor =
                                     _backgroundColor == Colors.white
                                         ? Colors.black
                                         : Colors.white;
-                                if (_activeColor == Colors.black){
+                                if (_activeColor == Colors.black) {
                                   setColor(Colors.white);
                                 } else if (_activeColor == Colors.white) {
                                   setColor(Colors.black);
@@ -954,24 +1040,23 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                             fontSize: 22,
                             fontWeight: FontWeight.w500),
                       ),
-
-                      _backgroundColor == Colors.black ?
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.circle,
-                          color: _activeColor.withOpacity(_colorOpacity),
-                          size: 32,
-                        ),
-                      ) :
-                      Icon(
-                        Icons.circle,
-                        color: _activeColor.withOpacity(_colorOpacity),
-                        size: 32,
-                      )
+                      _backgroundColor == Colors.black
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Icon(
+                                Icons.circle,
+                                color: _activeColor.withOpacity(_colorOpacity),
+                                size: 32,
+                              ),
+                            )
+                          : Icon(
+                              Icons.circle,
+                              color: _activeColor.withOpacity(_colorOpacity),
+                              size: 32,
+                            )
                     ],
                   )),
             ],
