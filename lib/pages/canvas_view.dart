@@ -591,7 +591,7 @@ class _CanvasViewState extends State<CanvasView>
   }
 
   void resetCanvas() {
-    _transformationController.value = Matrix4.identity();
+    _transformationController.value = Matrix4.identity()..scale(1.25);
   }
 
   void displayFullCanvas() async {
@@ -803,7 +803,7 @@ class _CanvasViewState extends State<CanvasView>
     if (importedDrawing != null) {
       drawImportedDrawing();
     }
-    _transformationController.value = Matrix4.identity()..scale(0.8);
+    _transformationController.value = Matrix4.identity()..scale(1.25);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setDrawingBoardStyles();
     });
@@ -982,11 +982,7 @@ class _CanvasViewState extends State<CanvasView>
                   showDefaultActions: _showDrawTools,
                   minScale: 0.05,
                   transformationController: _transformationController,
-
-                  /// Enable default action options
                   showDefaultTools: _showDrawTools,
-
-                  /// Enable default toolbar
                   boardClipBehavior: Clip.hardEdge,
                   clipBehavior: Clip.antiAlias,
                   defaultToolsBuilder: (Type t, _) {
