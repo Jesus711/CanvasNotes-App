@@ -241,7 +241,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         builder: (BuildContext context) {
           return AlertDialog(
               titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              backgroundColor: Colors.black54,
+              backgroundColor: _backgroundColor == Colors.black? Colors.white70 : Colors.black45,
               title: Container(
                   decoration: BoxDecoration(
                       color: Colors.blue.shade700,
@@ -265,14 +265,14 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Active Color: ",
-                          style: TextStyle(color: Colors.white, fontSize: 28),
+                          style: TextStyle(color: _backgroundColor == Colors.black ? Colors.black : Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
                         ),
                         Icon(
                           Icons.circle,
                           color: _activeColor.withOpacity(_colorOpacity),
-                          size: 56,
+                          size: 40,
                         ),
                       ],
                     ),
@@ -281,31 +281,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         IconButton(
                             tooltip: colorsList[0][1],
                             onPressed: () => {Navigator.pop(context, 0)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[0][2]),
                         IconButton(
                             tooltip: colorsList[1][1],
                             onPressed: () => {Navigator.pop(context, 1)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[1][2]),
                         IconButton(
                             tooltip: colorsList[2][1],
                             onPressed: () => {Navigator.pop(context, 2)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[2][2]),
                         IconButton(
                             tooltip: colorsList[3][1],
                             onPressed: () => {Navigator.pop(context, 3)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[3][2]),
                         IconButton(
                             tooltip: colorsList[4][1],
                             onPressed: () => {Navigator.pop(context, 4)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[4][2])
                       ],
@@ -315,31 +315,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         IconButton(
                             tooltip: colorsList[5][1],
                             onPressed: () => {Navigator.pop(context, 5)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[5][2]),
                         IconButton(
                             tooltip: colorsList[6][1],
                             onPressed: () => {Navigator.pop(context, 6)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[6][2]),
                         IconButton(
                             tooltip: colorsList[7][1],
                             onPressed: () => {Navigator.pop(context, 7)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[7][2]),
                         IconButton(
                             tooltip: colorsList[8][1],
                             onPressed: () => {Navigator.pop(context, 8)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[8][2]),
                         IconButton(
                             tooltip: colorsList[9][1],
                             onPressed: () => {Navigator.pop(context, 9)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[9][2])
                       ],
@@ -349,31 +349,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         IconButton(
                             tooltip: colorsList[10][1],
                             onPressed: () => {Navigator.pop(context, 10)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[10][2]),
                         IconButton(
                             tooltip: colorsList[11][1],
                             onPressed: () => {Navigator.pop(context, 11)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[11][2]),
                         IconButton(
                             tooltip: colorsList[12][1],
                             onPressed: () => {Navigator.pop(context, 12)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[12][2]),
                         IconButton(
                             tooltip: colorsList[13][1],
                             onPressed: () => {Navigator.pop(context, 13)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[13][2]),
                         IconButton(
                             tooltip: colorsList[14][1],
                             onPressed: () => {Navigator.pop(context, 14)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[14][2])
                       ],
@@ -383,31 +383,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         IconButton(
                             tooltip: colorsList[15][1],
                             onPressed: () => {Navigator.pop(context, 15)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[15][2]),
                         IconButton(
                             tooltip: colorsList[16][1],
                             onPressed: () => {Navigator.pop(context, 16)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[16][2]),
                         IconButton(
                             tooltip: colorsList[17][1],
                             onPressed: () => {Navigator.pop(context, 17)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[17][2]),
                         IconButton(
                             tooltip: colorsList[18][1],
                             onPressed: () => {Navigator.pop(context, 18)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[18][2]),
                         IconButton(
                             tooltip: colorsList[19][1],
                             onPressed: () => {Navigator.pop(context, 19)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[19][2])
                       ],
@@ -417,31 +417,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         IconButton(
                             tooltip: colorsList[20][1],
                             onPressed: () => {Navigator.pop(context, 20)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[20][2]),
                         IconButton(
                             tooltip: colorsList[21][1],
                             onPressed: () => {Navigator.pop(context, 21)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[21][2]),
                         IconButton(
                             tooltip: colorsList[22][1],
                             onPressed: () => {Navigator.pop(context, 22)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[22][2]),
                         IconButton(
                             tooltip: colorsList[23][1],
                             onPressed: () => {Navigator.pop(context, 23)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[23][2]),
                         IconButton(
                             tooltip: colorsList[24][1],
                             onPressed: () => {Navigator.pop(context, 24)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[24][2])
                       ],
@@ -451,31 +451,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         IconButton(
                             tooltip: colorsList[25][1],
                             onPressed: () => {Navigator.pop(context, 25)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[25][2]),
                         IconButton(
                             tooltip: colorsList[26][1],
                             onPressed: () => {Navigator.pop(context, 26)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[26][2]),
                         IconButton(
                             tooltip: colorsList[27][1],
                             onPressed: () => {Navigator.pop(context, 27)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[27][2]),
                         IconButton(
                             tooltip: colorsList[28][1],
                             onPressed: () => {Navigator.pop(context, 28)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[28][2]),
                         IconButton(
                             tooltip: colorsList[29][1],
                             onPressed: () => {Navigator.pop(context, 29)},
-                            iconSize: 42,
+                            iconSize: 38,
                             icon: const Icon(Icons.circle),
                             color: colorsList[29][2])
                       ],
@@ -484,8 +484,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       children: [
                         Text(
                           "Opacity: ${(_colorOpacity * 100).toInt()}",
-                          style: const TextStyle(
-                              fontSize: 28, color: Colors.white),
+                            style: TextStyle(color: _backgroundColor == Colors.black ? Colors.black : Colors.white, fontSize: 24, fontWeight: FontWeight.w700)
                         ),
                         Slider(
                           activeColor: Colors.blue.shade600,
@@ -493,7 +492,6 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                           max: 1.0,
                           divisions: 100,
                           value: _colorOpacity,
-                          label: (100 * _colorOpacity).toInt().toString(),
                           onChanged: (value) {
                             setState(() {
                               _colorOpacity = value;
@@ -515,7 +513,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
   void saveDrawingChanges(BuildContext context) async {
     DateTime now = DateTime.now();
-    String modifiedDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute}";
+    //TODO: Issue found on time format time 8:07pm -> 20:7, need to fixed to include leading 0 if minutes < 10
+    String modifiedDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
     _drawingDb.updateDrawing(importedDrawing!.ID, _convertImageToJson(), modifiedDate,);
 
     final snackBar = SnackBar(
@@ -660,7 +659,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         String drawingJSON = _convertImageToJson();
 
         DateTime now = DateTime.now();
-        String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute}";
+        String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
         _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, "");
         Navigator.pop(context, true);
       }
@@ -719,7 +718,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue.shade800,
           title: Text(
-            importedDrawing?.drawingName ?? "New Drawing",
+            importedDrawing != null ? importedDrawing!.drawingName == "Untitled" ? "${importedDrawing!.drawingName}${importedDrawing!.ID}" : importedDrawing!.drawingName : "New Drawing",
             style: const TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
           ),
@@ -734,7 +733,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                   background: Container(
                       width: canvasSize * 1.0, height: canvasSize * 1.0, decoration: BoxDecoration(
                     color: _backgroundColor,
-                    border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 4)
+                    border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 2)
                   ),),
                   boardBoundaryMargin: EdgeInsets.all(deviceWidth * (canvasSize / 1000)),
                   showDefaultActions: true,

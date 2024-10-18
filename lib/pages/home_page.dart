@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Choose Canvas Size", textAlign: TextAlign.center, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),),
+            title: const Text("Choose Canvas Size", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                         elevation: 8,
                       ),
                       onPressed: () => {Navigator.pop(context, 1000)},
-                      child: const Text("1000x1000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                      child: const Text("1000x1000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                       elevation: 8,
                     ),
                       onPressed: () => {Navigator.pop(context, 2000)},
-                      child: const Text("2000x2000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                      child: const Text("2000x2000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                       elevation: 8,
                     ),
                       onPressed: () => {Navigator.pop(context, 3000)},
-                      child: const Text("3000x3000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                      child: const Text("3000x3000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       elevation: 8,
                     ),
                       onPressed: () => {Navigator.pop(context, 4000)},
-                      child: const Text("4000x4000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                      child: const Text("4000x4000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                       elevation: 8,
                     ),
                       onPressed: () => {Navigator.pop(context, 5000)},
-                      child: const Text("5000x5000", style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w500),)),
+                      child: const Text("5000x5000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 )
               ],
             ),
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               Drawing drawing = snapshot.data![index];
               return Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
                   child: Slidable(
                       endActionPane:
                           ActionPane(
@@ -223,16 +223,20 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       backgroundColor: const Color.fromRGBO(64, 64, 64, 0.5),
-      body: _drawingList(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: _createNewCanvas,
-        tooltip: 'Create New Canvas',
-        child: const Icon(
-          Icons.add,
-          size: 32,
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: _drawingList(),
+      ),
+      floatingActionButton:
+          FloatingActionButton(
+            backgroundColor: Colors.white,
+            onPressed: _createNewCanvas,
+            tooltip: 'Create New Canvas',
+            child: const Icon(
+              Icons.add,
+              size: 32,
+            ),
+          ),
     );
   }
 }
