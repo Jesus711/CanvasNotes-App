@@ -1,4 +1,5 @@
 import "dart:convert";
+import "dart:developer";
 import "dart:io";
 import "dart:typed_data";
 import "package:canvas_notes_flutter/database/drawing_db.dart";
@@ -608,11 +609,11 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Download Drawing", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),),
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Icon(Icons.save_alt, size: 32, color: Colors.white,),
-                          )
+                          ),
+                          Text("Download Drawing", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),),
                         ],
                       )
                   )
@@ -781,6 +782,90 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     });
   }
 
+  Widget canvasMenu(BuildContext context) {
+    return PopupMenuButton<int>(
+      color: Colors.blue.shade500,
+      icon: const Icon(Icons.menu, size: 32,),
+      onSelected: (int value) async {
+        if (value == 1){
+          log("Value 1");
+          if (importedDrawing != null){
+            saveDrawingChanges(context);
+          }else{
+            _getImageData();
+          }
+        }
+        else if (value == 2) {
+          resetCanvas();
+        }
+        else if (value == 3) {
+          displayFullCanvas();
+        }
+        else if (value == 4) {
+          Uint8List? data = (await _controller.getImageData())?.buffer.asUint8List();
+          if (data == null) {
+            debugPrint('Error');
+            return;
+        }
+          _downloadImage(data);
+        }
+      },
+      itemBuilder: (BuildContext context) =>
+      <PopupMenuItem<int>>[
+        const PopupMenuItem<int>(
+          value: 1,
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 4),
+                child: Icon(Icons.save, size: 32),
+              ),
+              Text("Save Drawing", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+            ],
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 2,
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 4),
+                child: Icon(Icons.restore_page_outlined, size: 32),
+              ),
+              Text("Reset Position", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+            ],
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 3,
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 4),
+                child: Icon(Icons.image_search, size: 32),
+              ),
+              Text("View Full Canvas", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+            ],
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 4,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 4),
+                child: Icon(Icons.save_alt, size: 32),
+              ),
+              Text("Download Canvas", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -790,45 +875,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         appBar: AppBar(
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Row(
-                children: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade800, elevation: 0),
-                      onPressed: importedDrawing != null
-                          ? () => {saveDrawingChanges(context)}
-                          : _getImageData,
-                      child: const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.save,
-                              size: 28,
-                              color: Colors.white,
-                            ),
-                          ),
-                          // Text(
-                          //   importedDrawing != null ? "Save Changes" : "Save",
-                          //   style: const TextStyle(
-                          //       fontSize: 18,
-                          //       fontWeight: FontWeight.w500,
-                          //       color: Colors.white),
-                          // ),
-                        ],
-                      )
-                  ),
-                  ElevatedButton(onPressed: () => {resetCanvas()},
-                      child: const Icon(Icons.restore_page_outlined)),
-                  ElevatedButton(onPressed: () => {displayFullCanvas()},
-                      child: const Icon(Icons.image_search)),
-                  ElevatedButton(
-                      onPressed: () => {},
-                      child: const Icon(Icons.menu)),
-                ],
-              ),
-            )
+              padding: const EdgeInsets.all(8.0),
+              child: canvasMenu(context),
+            ),
           ],
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue.shade800,
