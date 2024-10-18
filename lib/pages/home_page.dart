@@ -41,8 +41,30 @@ class _HomePageState extends State<HomePage> {
                         backgroundColor: Colors.blue.shade800,
                         elevation: 8,
                       ),
+                      onPressed: () => {Navigator.pop(context, 500)},
+                      child: const Text("500x500", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      backgroundColor: Colors.blue.shade800,
+                      elevation: 8,
+                    ),
                       onPressed: () => {Navigator.pop(context, 1000)},
                       child: const Text("1000x1000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      backgroundColor: Colors.blue.shade800,
+                      elevation: 8,
+                    ),
+                      onPressed: () => {Navigator.pop(context, 1500)},
+                      child: const Text("1500x1500", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -63,30 +85,8 @@ class _HomePageState extends State<HomePage> {
                       backgroundColor: Colors.blue.shade800,
                       elevation: 8,
                     ),
-                      onPressed: () => {Navigator.pop(context, 3000)},
-                      child: const Text("3000x3000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-                      backgroundColor: Colors.blue.shade800,
-                      elevation: 8,
-                    ),
-                      onPressed: () => {Navigator.pop(context, 4000)},
-                      child: const Text("4000x4000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-                      backgroundColor: Colors.blue.shade800,
-                      elevation: 8,
-                    ),
-                      onPressed: () => {Navigator.pop(context, 5000)},
-                      child: const Text("5000x5000", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
+                      onPressed: () => {Navigator.pop(context, 2500)},
+                      child: const Text("2500x2500", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w500),)),
                 )
               ],
             ),
