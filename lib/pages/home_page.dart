@@ -1,8 +1,8 @@
 import 'package:canvas_notes_flutter/database/drawing_db.dart';
 import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:canvas_notes_flutter/pages/canvas_view.dart';
+import 'package:canvas_notes_flutter/utils/drawing_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -121,12 +121,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _drawingList() {
+
     return FutureBuilder(
       future: _drawingDb.getDrawings(),
       builder: (context, snapshot) {
-        if (snapshot.data == null || snapshot.data!.isEmpty) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // If there's an error, show an error message
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+          // If the data is empty, show your empty state widget
           return const EmptyList();
         }
+
         return Column(
           children: [
             const Text("Tap to Open Canvas",
@@ -136,74 +144,11 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data?.length ?? 0,
                   itemBuilder: (context, index) {
                     Drawing drawing = snapshot.data![index];
-                    return Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                        child: Slidable(
-                            endActionPane: ActionPane(
-                                motion: const StretchMotion(),
-                                extentRatio: 0.3,
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (value) =>
-                                        {_deleteCanvas(drawing.ID)},
-                                    icon: Icons.delete,
-                                    borderRadius: BorderRadius.circular(15),
-                                    backgroundColor: Colors.red,
-                                  )
-                                ]),
-                            child: ElevatedButton(
-                                onPressed: () => {_openSavedCanvas(drawing)},
-                                style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 12),
-                                    backgroundColor: Colors.blue.shade600,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16))),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          drawing.drawingName == "Untitled"
-                                              ? "${drawing.drawingName}${drawing.ID}"
-                                              : drawing.drawingName,
-                                          style: const TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        Text(
-                                          "Size: ${drawing.canvasSize}x${drawing.canvasSize}",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          drawing.lastModifiedDate == ""
-                                              ? "Created On: ${drawing.createdAtDate}"
-                                              : "Last Modified: ${drawing.lastModifiedDate}",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        )
-                                      ],
-                                    ),
-                                    const Icon(
-                                      Icons.image_sharp,
-                                      color: Colors.white,
-                                      size: 48,
-                                    )
-                                  ],
-                                ))));
+                    return DrawingItem(
+                        drawing: drawing,
+                        deleteDrawing: (value) => {_deleteCanvas(drawing.ID)},
+                        openCanvas: () => {_openSavedCanvas(drawing)},
+                    );
                   }),
             )
           ],
