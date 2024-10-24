@@ -1,4 +1,5 @@
 import 'package:canvas_notes_flutter/pages/home_page.dart';
+import 'package:canvas_notes_flutter/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }
