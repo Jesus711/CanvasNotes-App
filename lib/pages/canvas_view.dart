@@ -1,8 +1,8 @@
 import "dart:convert";
-import "dart:developer";
 import "dart:io";
 import "dart:typed_data";
 import "package:canvas_notes_flutter/database/drawing_db.dart";
+import "package:canvas_notes_flutter/utils/color_picker.dart";
 import "package:flutter/material.dart";
 import "package:flutter_drawing_board/flutter_drawing_board.dart";
 import "package:flutter_drawing_board/paint_contents.dart";
@@ -21,8 +21,7 @@ class CanvasView extends StatefulWidget {
   State<CanvasView> createState() => _CanvasViewState();
 }
 
-class _CanvasViewState extends State<CanvasView>
-    with SingleTickerProviderStateMixin {
+class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateMixin {
   final DrawingController _controller = DrawingController();
   final _nameController = TextEditingController();
 
@@ -40,187 +39,10 @@ class _CanvasViewState extends State<CanvasView>
 
   bool _showDrawTools = true;
 
+  bool _showActiveColor = true;
+
   final TransformationController _transformationController =
       TransformationController();
-
-  static List colorsList = [
-    // Reds
-    [0, "Red", Colors.red.shade600],
-    [1, "Red Accent", Colors.redAccent.shade400],
-    [2, "Pink", Colors.pink.shade600],
-    [3, "Pink Accent", Colors.pinkAccent.shade400],
-
-    // Oranges and Yellows
-    [4, "Orange", Colors.orange.shade600],
-    [5, "Deep Orange", Colors.deepOrange.shade600],
-    [6, "Orange Accent", Colors.orangeAccent.shade400],
-    [7, "Amber", Colors.amber.shade600],
-    [8, "Yellow", Colors.yellow.shade600],
-    [9, "Yellow Accent", Colors.yellowAccent.shade400],
-
-    // Greens
-    [10, "Green", Colors.green.shade600],
-    [11, "Light Green", Colors.lightGreen.shade600],
-    [12, "Green Accent", Colors.greenAccent.shade400],
-    [13, "Teal", Colors.teal.shade600],
-    [14, "Teal Accent", Colors.tealAccent.shade400],
-
-    // Blues
-    [15, "Blue", Colors.blue.shade600],
-    [16, "Light Blue", Colors.lightBlue.shade600],
-    [17, "Blue Accent", Colors.blueAccent.shade400],
-    [18, "Cyan", Colors.cyan.shade600],
-    [19, "Cyan Accent", Colors.cyanAccent.shade400],
-
-    // Purples and Indigo
-    [20, "Purple", Colors.purple.shade600],
-    [21, "Deep Purple", Colors.deepPurple.shade600],
-    [22, "Purple Accent", Colors.purpleAccent.shade400],
-    [23, "Indigo", Colors.indigo.shade600],
-    [24, "Indigo Accent", Colors.indigoAccent.shade400],
-
-    // Neutral and Others
-    [25, "Black", Colors.black],
-    [26, "Brown", Colors.brown.shade600],
-    [27, "Grey", Colors.grey.shade600],
-    [28, "Blue Grey", Colors.blueGrey.shade600],
-    [29, "White", Colors.white]
-  ];
-
-  final colorPickerList = [
-    [
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[0][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[1][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[2][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[3][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[4][2])
-    ],
-    [
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[5][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[6][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[7][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[8][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[9][2])
-    ],
-    [
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[10][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[11][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[12][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[13][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[14][2])
-    ],
-    [
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[15][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[16][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[17][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[18][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[19][2])
-    ],
-    [
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[20][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[21][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[22][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[23][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[24][2])
-    ],
-    [
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[25][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[26][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[27][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[28][2]),
-      IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.circle),
-          color: colorsList[29][2])
-    ]
-  ];
 
   void setDrawingBoardStyles() {
     _controller.setStyle(
@@ -250,8 +72,8 @@ class _CanvasViewState extends State<CanvasView>
           return AlertDialog(
               titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               backgroundColor: _backgroundColor == Colors.black
-                  ? Colors.white70
-                  : Colors.black45,
+                  ? Colors.white.withOpacity(0.85)
+                  : Colors.black.withOpacity(0.5),
               title: Container(
                   decoration: BoxDecoration(
                       color: Colors.blue.shade700,
@@ -268,10 +90,9 @@ class _CanvasViewState extends State<CanvasView>
               contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
               content: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -291,210 +112,7 @@ class _CanvasViewState extends State<CanvasView>
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                            tooltip: colorsList[0][1],
-                            onPressed: () => {Navigator.pop(context, 0)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[0][2]),
-                        IconButton(
-                            tooltip: colorsList[1][1],
-                            onPressed: () => {Navigator.pop(context, 1)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[1][2]),
-                        IconButton(
-                            tooltip: colorsList[2][1],
-                            onPressed: () => {Navigator.pop(context, 2)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[2][2]),
-                        IconButton(
-                            tooltip: colorsList[3][1],
-                            onPressed: () => {Navigator.pop(context, 3)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[3][2]),
-                        IconButton(
-                            tooltip: colorsList[4][1],
-                            onPressed: () => {Navigator.pop(context, 4)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[4][2])
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            tooltip: colorsList[5][1],
-                            onPressed: () => {Navigator.pop(context, 5)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[5][2]),
-                        IconButton(
-                            tooltip: colorsList[6][1],
-                            onPressed: () => {Navigator.pop(context, 6)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[6][2]),
-                        IconButton(
-                            tooltip: colorsList[7][1],
-                            onPressed: () => {Navigator.pop(context, 7)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[7][2]),
-                        IconButton(
-                            tooltip: colorsList[8][1],
-                            onPressed: () => {Navigator.pop(context, 8)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[8][2]),
-                        IconButton(
-                            tooltip: colorsList[9][1],
-                            onPressed: () => {Navigator.pop(context, 9)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[9][2])
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            tooltip: colorsList[10][1],
-                            onPressed: () => {Navigator.pop(context, 10)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[10][2]),
-                        IconButton(
-                            tooltip: colorsList[11][1],
-                            onPressed: () => {Navigator.pop(context, 11)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[11][2]),
-                        IconButton(
-                            tooltip: colorsList[12][1],
-                            onPressed: () => {Navigator.pop(context, 12)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[12][2]),
-                        IconButton(
-                            tooltip: colorsList[13][1],
-                            onPressed: () => {Navigator.pop(context, 13)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[13][2]),
-                        IconButton(
-                            tooltip: colorsList[14][1],
-                            onPressed: () => {Navigator.pop(context, 14)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[14][2])
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            tooltip: colorsList[15][1],
-                            onPressed: () => {Navigator.pop(context, 15)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[15][2]),
-                        IconButton(
-                            tooltip: colorsList[16][1],
-                            onPressed: () => {Navigator.pop(context, 16)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[16][2]),
-                        IconButton(
-                            tooltip: colorsList[17][1],
-                            onPressed: () => {Navigator.pop(context, 17)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[17][2]),
-                        IconButton(
-                            tooltip: colorsList[18][1],
-                            onPressed: () => {Navigator.pop(context, 18)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[18][2]),
-                        IconButton(
-                            tooltip: colorsList[19][1],
-                            onPressed: () => {Navigator.pop(context, 19)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[19][2])
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            tooltip: colorsList[20][1],
-                            onPressed: () => {Navigator.pop(context, 20)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[20][2]),
-                        IconButton(
-                            tooltip: colorsList[21][1],
-                            onPressed: () => {Navigator.pop(context, 21)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[21][2]),
-                        IconButton(
-                            tooltip: colorsList[22][1],
-                            onPressed: () => {Navigator.pop(context, 22)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[22][2]),
-                        IconButton(
-                            tooltip: colorsList[23][1],
-                            onPressed: () => {Navigator.pop(context, 23)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[23][2]),
-                        IconButton(
-                            tooltip: colorsList[24][1],
-                            onPressed: () => {Navigator.pop(context, 24)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[24][2])
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            tooltip: colorsList[25][1],
-                            onPressed: () => {Navigator.pop(context, 25)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[25][2]),
-                        IconButton(
-                            tooltip: colorsList[26][1],
-                            onPressed: () => {Navigator.pop(context, 26)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[26][2]),
-                        IconButton(
-                            tooltip: colorsList[27][1],
-                            onPressed: () => {Navigator.pop(context, 27)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[27][2]),
-                        IconButton(
-                            tooltip: colorsList[28][1],
-                            onPressed: () => {Navigator.pop(context, 28)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[28][2]),
-                        IconButton(
-                            tooltip: colorsList[29][1],
-                            onPressed: () => {Navigator.pop(context, 29)},
-                            iconSize: 38,
-                            icon: const Icon(Icons.circle),
-                            color: colorsList[29][2])
-                      ],
-                    ),
+                    ColorPicker(activeColor: _activeColor),
                     Column(
                       children: [
                         Text("Opacity: ${(_colorOpacity * 100).toInt()}",
@@ -520,18 +138,17 @@ class _CanvasViewState extends State<CanvasView>
                       ],
                     )
                   ],
-                );
+                ));
               }));
         }).then((colorChoice) {
       if (colorChoice == null) return;
-      Color color = colorsList[colorChoice][2];
+      Color color = colorChoice;
       setColor(color);
     });
   }
 
   void saveDrawingChanges(BuildContext context) async {
     DateTime now = DateTime.now();
-    //TODO: Issue found on time format time 8:07pm -> 20:7, need to fixed to include leading 0 if minutes < 10
     String modifiedDate =
         "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
     _drawingDb.updateDrawing(
@@ -822,16 +439,21 @@ class _CanvasViewState extends State<CanvasView>
             _showDrawTools = !_showDrawTools;
           });
         } else if (value == 2) {
+          setState(() {
+            _showActiveColor = !_showActiveColor;
+          });
+        }
+        else if (value == 3) {
           if (importedDrawing != null) {
             saveDrawingChanges(context);
           } else {
             _getImageData();
           }
-        } else if (value == 3) {
-          resetCanvas();
         } else if (value == 4) {
-          displayFullCanvas();
+          resetCanvas();
         } else if (value == 5) {
+          displayFullCanvas();
+        } else if (value == 6) {
           Uint8List? data =
               (await _controller.getImageData())?.buffer.asUint8List();
           if (data == null) {
@@ -860,8 +482,26 @@ class _CanvasViewState extends State<CanvasView>
             ],
           ),
         ),
-        const PopupMenuItem<int>(
+        PopupMenuItem<int>(
           value: 2,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Icon(_showActiveColor ? Icons.visibility_off : Icons.visibility, size: 32),
+              ),
+              Text(
+                _showActiveColor ? "Hide Active Color" : "Show Active Color",
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 3,
           child: Row(
             children: [
               Padding(
@@ -879,7 +519,7 @@ class _CanvasViewState extends State<CanvasView>
           ),
         ),
         const PopupMenuItem<int>(
-          value: 3,
+          value: 4,
           child: Row(
             children: [
               Padding(
@@ -897,7 +537,7 @@ class _CanvasViewState extends State<CanvasView>
           ),
         ),
         const PopupMenuItem<int>(
-          value: 4,
+          value: 5,
           child: Row(
             children: [
               Padding(
@@ -915,7 +555,7 @@ class _CanvasViewState extends State<CanvasView>
           ),
         ),
         const PopupMenuItem<int>(
-          value: 5,
+          value: 6,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -966,7 +606,8 @@ class _CanvasViewState extends State<CanvasView>
         body: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
           return Stack(
-            children: [
+            children:
+            [
               DrawingBoard(
                   controller: _controller,
                   background: Container(
@@ -1020,9 +661,11 @@ class _CanvasViewState extends State<CanvasView>
                             },
                             iconSize: 42,
                             isActive: false,
-                          ));
-                  }),
-              Positioned(
+                          )
+                      );
+                    }
+                  ),
+              _showActiveColor ? Positioned(
                   top: 10,
                   left: 5,
                   child: Row(
@@ -1048,15 +691,24 @@ class _CanvasViewState extends State<CanvasView>
                                 size: 32,
                               ),
                             )
-                          : Icon(
-                              Icons.circle,
-                              color: _activeColor.withOpacity(_colorOpacity),
-                              size: 32,
-                            )
+                          : Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius:  BorderRadius.circular(20),
+                            ),
+                            child: Icon(
+                                Icons.circle,
+                                color: _activeColor.withOpacity(_colorOpacity),
+                                size: 32,
+                              ),
+                          )
                     ],
-                  )),
+                  )
+              ) : Container(),
             ],
           );
-        }));
+        }
+        )
+    );
   }
 }
