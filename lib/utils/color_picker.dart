@@ -66,7 +66,7 @@ class ColorPicker extends StatelessWidget {
             ...List.generate(colorsList.length, (index) {
               return IconButton(
                   tooltip: colorsList[index][1],
-                  onPressed: () => {Navigator.pop(context, index)},
+                  onPressed: () => {Navigator.pop(context, colorsList[index][2])},
                   iconSize: 38,
                   icon: const Icon(Icons.circle),
                   color: colorsList[index][2]);
