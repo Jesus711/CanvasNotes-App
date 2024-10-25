@@ -642,6 +642,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                   ),
                   minScale: 0.05,
                   transformationController: _transformationController,
+                  // TODO: Build own tools to fix menu toggle bug
+                  // BUG: When max zoomed out with menu showing, toggling menu causes canvas to spring to the top
+                  // due to rerender
                   showDefaultActions: _showDrawTools,
                   showDefaultTools: _showDrawTools,
                   defaultToolsBuilder: (Type t, _) {
