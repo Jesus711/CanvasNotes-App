@@ -4,7 +4,7 @@ import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-
+// TODO: Handle Storing Background Color used in image
 class DrawingDatabase {
 
   static Database? _db;

@@ -6,6 +6,7 @@ class Drawing {
   final String createdAtDate;
   final String lastModifiedDate;
 
+  // TODO: Add BackgroundColor
   Drawing({
     required this.ID,
     required this.drawingName,
