@@ -652,9 +652,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                                     _backgroundColor == Colors.white
                                         ? Colors.black
                                         : Colors.white;
-                                if (_activeColor == Colors.black) {
+                                if (_activeColor == Colors.black && _backgroundColor == Colors.black) {
                                   setColor(Colors.white);
-                                } else if (_activeColor == Colors.white) {
+                                } else if (_activeColor == Colors.white && _backgroundColor == Colors.white) {
                                   setColor(Colors.black);
                                 }
                               })
