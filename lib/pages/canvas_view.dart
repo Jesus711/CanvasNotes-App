@@ -8,6 +8,7 @@ import "package:flutter_drawing_board/flutter_drawing_board.dart";
 import "package:flutter_drawing_board/paint_contents.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:path_provider/path_provider.dart";
+import "dart:math" as math;
 
 import "../models/drawing.dart";
 
@@ -32,23 +33,13 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   late int canvasSize = widget.canvasSize;
 
   double _colorOpacity = 1.0;
-
   Color _activeColor = Colors.black;
-
   Color _backgroundColor = Colors.white;
-
   bool _showDrawTools = true;
-
   bool _showActiveColor = true;
 
   final TransformationController _transformationController =
       TransformationController();
-
-  void setDrawingBoardStyles() {
-    _controller.setStyle(
-      color: Colors.black,
-    );
-  }
 
   void setColor(Color color) {
     setState(() {
@@ -63,8 +54,41 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     });
   }
 
-  // TODO: Modify function to display for choosing a background color
-  // May or may not be needed
+  void displayBackgroundColorPicker() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              backgroundColor: _backgroundColor == Colors.black
+                  ? Colors.white.withOpacity(0.85)
+                  : Colors.black.withOpacity(0.5),
+              title: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blue.shade700,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text(
+                      "Background Color Picker",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 24, color: Colors.white),
+                    ),
+                  )),
+              contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
+              content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return SingleChildScrollView(
+                        child: ColorPicker(activeColor: _backgroundColor),
+                        );
+                  }));
+        }).then((colorChoice) {
+      if (colorChoice == null) return;
+      Color color = colorChoice;
+      setBackgroundColor(color);
+    });
+  }
+
   void displayColorPicker() {
     showDialog(
         context: context,
@@ -149,8 +173,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
   void saveDrawingChanges(BuildContext context) async {
     DateTime now = DateTime.now();
+
     String modifiedDate =
         "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
+
     _drawingDb.updateDrawing(
       importedDrawing!.ID,
       _convertImageToJson(),
@@ -163,13 +189,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ),
-      duration: const Duration(
-          milliseconds: 1100), // Duration the snack bar will be shown
+      duration: const Duration(milliseconds: 1100), // Duration the snack bar will be shown
       behavior: SnackBarBehavior.floating, // Makes the SnackBar float
       margin: const EdgeInsets.all(16.0), // Adds margin to the SnackBar
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0), // Rounded corners
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
     );
 
     // Show the SnackBar
@@ -208,7 +231,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   }
 
   void resetCanvas() {
-    _transformationController.value = Matrix4.identity()..scale(1.25);
+    _transformationController.value = Matrix4.identity()..scale(1.4);
   }
 
   void displayFullCanvas() async {
@@ -236,23 +259,25 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       ),
                       ElevatedButton(
                           onPressed: () => {_downloadImage(data)},
+
                           style: ElevatedButton.styleFrom(
+                              elevation: 20,
                               backgroundColor: Colors.blue.shade600),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: EdgeInsets.only(right: 8.0),
                                 child: Icon(
-                                  Icons.save_alt,
+                                  Icons.download,
                                   size: 32,
                                   color: Colors.white,
                                 ),
                               ),
                               Text(
-                                "Download Drawing",
+                                "Download",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
@@ -420,10 +445,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     if (importedDrawing != null) {
       drawImportedDrawing();
     }
-    _transformationController.value = Matrix4.identity()..scale(1.25);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setDrawingBoardStyles();
-    });
+    _transformationController.value = Matrix4.identity()..scale(1.4);
+    setColor(Colors.black);
   }
 
   Widget canvasMenu(BuildContext context) {
@@ -509,7 +532,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                 child: Icon(Icons.save, size: 32),
               ),
               Text(
-                "Save Drawing",
+                "Save Canvas",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -598,7 +621,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                 ? importedDrawing!.drawingName == "Untitled"
                     ? "${importedDrawing!.drawingName}${importedDrawing!.ID}"
                     : importedDrawing!.drawingName
-                : "New Drawing",
+                : "New Canvas",
             style: const TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
           ),
@@ -615,17 +638,12 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     height: canvasSize * 1.0,
                     decoration: BoxDecoration(
                       color: _backgroundColor,
-                      //border: Border.all(color: Colors.red, width: (canvasSize / 1000) + 2)
                     ),
                   ),
-                  boardBoundaryMargin:
-                      EdgeInsets.all(deviceWidth * (canvasSize / 1000)),
-                  showDefaultActions: _showDrawTools,
                   minScale: 0.05,
                   transformationController: _transformationController,
+                  showDefaultActions: _showDrawTools,
                   showDefaultTools: _showDrawTools,
-                  boardClipBehavior: Clip.hardEdge,
-                  clipBehavior: Clip.antiAlias,
                   defaultToolsBuilder: (Type t, _) {
                     return DrawingBoard.defaultTools(t, _controller)
                       ..insert(
@@ -634,32 +652,18 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                             icon: Icons.color_lens_rounded,
                             color: Colors.blue.shade500,
                             onTap: () => displayColorPicker(),
-                            iconSize: 42,
+                            iconSize: 36,
                             isActive: false,
                           ))
                       ..insert(
                           1,
                           DefToolItem(
-                            icon: _backgroundColor == Colors.white
-                                ? Icons.dark_mode
-                                : Icons.light_mode,
-                            color: _backgroundColor == Colors.white
-                                ? Colors.black
-                                : Colors.yellow.shade800,
+                            icon: Icons.format_color_fill,
+                            color: Colors.blue,
                             onTap: () => {
-                              setState(() {
-                                _backgroundColor =
-                                    _backgroundColor == Colors.white
-                                        ? Colors.black
-                                        : Colors.white;
-                                if (_activeColor == Colors.black && _backgroundColor == Colors.black) {
-                                  setColor(Colors.white);
-                                } else if (_activeColor == Colors.white && _backgroundColor == Colors.white) {
-                                  setColor(Colors.black);
-                                }
-                              })
+                              displayBackgroundColorPicker(),
                             },
-                            iconSize: 42,
+                            iconSize: 36,
                             isActive: false,
                           )
                       );
@@ -673,9 +677,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       Text(
                         "Active Color: ",
                         style: TextStyle(
-                            color: _backgroundColor == Colors.white
-                                ? Colors.black
-                                : Colors.blue,
+                            color: _backgroundColor == Colors.black ? Colors.white : Colors.black,
                             fontSize: 22,
                             fontWeight: FontWeight.w500),
                       ),
@@ -705,7 +707,27 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     ],
                   )
               ) : Container(),
-            ],
+              Positioned(
+                  bottom: _showDrawTools ? 100 : 10,
+                  right: 5,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: _showDrawTools ? Matrix4.rotationX(0) : Matrix4.rotationX(math.pi),
+                    child: IconButton(
+                      tooltip: _showDrawTools ? "Close Draw Tools" :"Open Draw Tools",
+                      onPressed: () {
+                        setState(() {
+                          _showDrawTools = !_showDrawTools;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.expand_circle_down,
+                        size: 48,
+                        color: _backgroundColor == Colors.black ? Colors.white : Colors.black,),
+                      ),
+                  )
+                  ),
+              ]
           );
         }
         )
