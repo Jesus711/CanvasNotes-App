@@ -111,7 +111,8 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(
             builder: (context) => CanvasView(
                 importedDrawing: loadDrawing,
-                canvasSize: loadDrawing.canvasSize)));
+                canvasSize: loadDrawing.canvasSize
+            )));
     setState(() {});
   }
 

@@ -1,12 +1,12 @@
 class Drawing {
-  final int ID; // ID can be null when inserting a new drawing
+  final int ID; 
   final String drawingName;
   final String drawingJSON;
   final int canvasSize;
   final String createdAtDate;
   final String lastModifiedDate;
+  final String backgroundColor;
 
-  // TODO: Add BackgroundColor
   Drawing({
     required this.ID,
     required this.drawingName,
@@ -14,6 +14,7 @@ class Drawing {
     required this.canvasSize,
     required this.createdAtDate,
     required this.lastModifiedDate,
+    required this.backgroundColor,
   });
 
 }

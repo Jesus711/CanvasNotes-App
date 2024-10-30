@@ -9,7 +9,6 @@ import "package:flutter_drawing_board/paint_contents.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:path_provider/path_provider.dart";
 import "dart:math" as math;
-
 import "../models/drawing.dart";
 
 class CanvasView extends StatefulWidget {
@@ -29,12 +28,12 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   final DrawingDatabase _drawingDb = DrawingDatabase.instance;
 
   late final importedDrawing = widget.importedDrawing;
-
   late int canvasSize = widget.canvasSize;
 
   double _colorOpacity = 1.0;
   Color _activeColor = Colors.black;
   Color _backgroundColor = Colors.white;
+
   bool _showDrawTools = true;
   bool _showActiveColor = true;
 
@@ -52,6 +51,12 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     setState(() {
       _backgroundColor = color;
     });
+  }
+
+  String convertBGtoString(Color color) {
+    Map<String, int> colors = {"R": _backgroundColor.red, "G":_backgroundColor.green, "B": _backgroundColor.blue };
+    String bgString = jsonEncode(colors);
+    return bgString;
   }
 
   void displayBackgroundColorPicker() {
@@ -177,10 +182,13 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     String modifiedDate =
         "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
 
+    String backgroundColor = convertBGtoString(_backgroundColor);
+
     _drawingDb.updateDrawing(
       importedDrawing!.ID,
       _convertImageToJson(),
       modifiedDate,
+      backgroundColor
     );
 
     final snackBar = SnackBar(
@@ -200,11 +208,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   }
 
   void drawImportedDrawing() {
-    List<dynamic> drawingSteps =
-        jsonDecode(importedDrawing!.drawingJSON) as List<dynamic>;
-
-    List<Map<String, dynamic>> lines =
-        drawingSteps.cast<Map<String, dynamic>>();
+    List<dynamic> drawingSteps = jsonDecode(importedDrawing!.drawingJSON) as List<dynamic>;
+    List<Map<String, dynamic>> lines = drawingSteps.cast<Map<String, dynamic>>();
 
     for (var i = 0; i < lines.length; i++) {
       String lineType = lines[i]["type"];
@@ -223,6 +228,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         _controller.addContent(Eraser.fromJson(lines[i]));
       }
     }
+
+    Map<String, dynamic> savedBGColor = jsonDecode(importedDrawing!.backgroundColor);
+    setBackgroundColor(Color.fromRGBO(savedBGColor["R"] as int, savedBGColor["G"] as int, savedBGColor["B"] as int, 1));
   }
 
   String _convertImageToJson() {
@@ -431,9 +439,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         String drawingJSON = _convertImageToJson();
 
         DateTime now = DateTime.now();
+        String bgString = convertBGtoString(_backgroundColor);
         String createdDate =
             "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
-        _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, "");
+        _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, "", bgString);
         Navigator.pop(context, true);
       }
     });

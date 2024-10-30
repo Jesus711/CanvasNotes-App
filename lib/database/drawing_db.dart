@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:canvas_notes_flutter/models/drawing.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-// TODO: Handle Storing Background Color used in image
 class DrawingDatabase {
 
   static Database? _db;
@@ -42,7 +40,8 @@ class DrawingDatabase {
           drawingJSON Text NOT NULL,
           canvasSize Integer,
           createdAtDate Text NOT NULL,
-          lastModifiedDate Text NOT NULL
+          lastModifiedDate Text NOT NULL,
+          backgroundColor Text NOT NULL
         );
         """)
         }
@@ -51,14 +50,15 @@ class DrawingDatabase {
   }
 
 
-  void addDrawing(String name, String jsonData, int size, String createdDate, String? lastModifiedDate) async {
+  void addDrawing(String name, String jsonData, int size, String createdDate, String? lastModifiedDate, String backgroundColor) async {
     final db = await database;
     db.insert("Drawing", {
     "drawingName": name,
     "drawingJSON": jsonData,
     "canvasSize" : size,
     "createdAtDate" : createdDate,
-    "lastModifiedDate" : lastModifiedDate
+    "lastModifiedDate" : lastModifiedDate,
+    "backgroundColor" : backgroundColor
     });
 
     log("Drawing Added");
@@ -69,11 +69,12 @@ class DrawingDatabase {
     db.delete("Drawing", where: "id = ?", whereArgs: [drawingID]);
   }
 
-  void updateDrawing(int drawingID, String jsonChanges, String modifiedDate) async {
+  void updateDrawing(int drawingID, String jsonChanges, String modifiedDate, String backgroundColor) async {
     final db = await database;
     db.update("Drawing", {
       "drawingJSON": jsonChanges,
       "lastModifiedDate" : modifiedDate,
+      "backgroundColor" : backgroundColor,
     } , where: "id = ?", whereArgs: [drawingID]);
 
     log("Drawing Updated");
@@ -93,6 +94,7 @@ class DrawingDatabase {
           canvasSize: drawing["canvasSize"] as int,
           createdAtDate: drawing["createdAtDate"] as String,
           lastModifiedDate: drawing["lastModifiedDate"] as String,
+          backgroundColor: drawing["backgroundColor"] as String,
         )
     ).toList();
 
