@@ -161,6 +161,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              //Color.fromRGBO(161, 161, 157, 1),
+              //Color.fromRGBO(156, 156, 156, 1),
+              //Color.fromRGBO(234, 237, 229, 1),
+              Color.fromRGBO(105, 107, 111, 1),
+              Color.fromRGBO(146, 148, 152, 1)
+            ],//[Colors.lightBlue, Colors.blue],
+            )
+          )
+        ),
         backgroundColor: Colors.blue.shade800,
         title: const Text(
           "Canvas Notes",

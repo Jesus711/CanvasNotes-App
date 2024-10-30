@@ -360,7 +360,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
                 )),
-            backgroundColor: Colors.blue.shade800,
+            backgroundColor: const Color.fromRGBO(85, 87, 91, 1),
             contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -388,7 +388,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       errorBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
-                      fillColor: Color.fromRGBO(30, 136, 229, 1),
+                      fillColor: Color.fromRGBO(105, 107, 111, 1),
                       filled: true,
                       hintText: "Drawing #...",
                       hintStyle: TextStyle(color: Colors.white60, fontSize: 22),
@@ -451,7 +451,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
   Widget canvasMenu(BuildContext context) {
     return PopupMenuButton<int>(
-      color: Colors.blue.shade500,
+      color: const Color.fromRGBO(105, 107, 111, 1),
       icon: const Icon(
         Icons.menu,
         size: 32,
@@ -608,6 +608,21 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
     return Scaffold(
         appBar: AppBar(
+          flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      //Color.fromRGBO(161, 161, 157, 1),
+                      //Color.fromRGBO(156, 156, 156, 1),
+                      //Color.fromRGBO(234, 237, 229, 1),
+                      Color.fromRGBO(105, 107, 111, 1),
+                      Color.fromRGBO(146, 148, 152, 1)
+                    ],//[Colors.lightBlue, Colors.blue],
+                  )
+              )
+          ),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -615,7 +630,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
             ),
           ],
           foregroundColor: Colors.white,
-          backgroundColor: Colors.blue.shade800,
+          backgroundColor: Colors.blue.shade600,
           title: Text(
             importedDrawing != null
                 ? importedDrawing!.drawingName == "Untitled"
@@ -623,7 +638,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     : importedDrawing!.drawingName
                 : "New Canvas",
             style: const TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
           ),
         ),
         body: StatefulBuilder(
@@ -717,6 +732,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     alignment: Alignment.center,
                     transform: _showDrawTools ? Matrix4.rotationX(0) : Matrix4.rotationX(math.pi),
                     child: IconButton(
+                      padding: const EdgeInsets.all(4),
                       tooltip: _showDrawTools ? "Close Draw Tools" :"Open Draw Tools",
                       onPressed: () {
                         setState(() {
@@ -725,7 +741,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                       },
                       icon: Icon(
                         Icons.expand_circle_down,
-                        size: 48,
+                        size: 36,
                         color: _backgroundColor == Colors.black ? Colors.white : Colors.black,),
                       ),
                   )

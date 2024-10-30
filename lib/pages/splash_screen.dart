@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       });
     });
     
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 3000), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
     });
     
@@ -69,7 +69,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.lightBlue, Colors.blue],
+              colors: [
+                Color.fromRGBO(161, 161, 157, 1),
+                Color.fromRGBO(156, 156, 156, 1),
+                Color.fromRGBO(234, 237, 229, 1),
+                Color.fromRGBO(145, 147, 151, 1),
+                Color.fromRGBO(146, 148, 152, 1)],//[Colors.lightBlue, Colors.blue],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
           ),
@@ -80,11 +85,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             Transform(
                 alignment: Alignment.center,
                 transform: _changeIcon ? Matrix4.rotationY(math.pi) : Matrix4.rotationY(0),
-                child: const Icon(Icons.draw, size: 80, color: Colors.white, textDirection: TextDirection.ltr,)),
+                child: const Icon(Icons.draw, size: 80, color: Color.fromRGBO(56, 56, 56, 1), textDirection: TextDirection.ltr,)),
             const SizedBox(height: 12),
             const Text("Canvas Notes", style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.white,
+                color: Color.fromRGBO(56, 56, 56, 1),
                 fontSize: 40,
                 fontWeight: FontWeight.w600))
           ],

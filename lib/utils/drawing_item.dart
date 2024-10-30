@@ -36,9 +36,18 @@ class DrawingItem extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: const LinearGradient(
-                    colors: [Colors.blue, Colors.blue],
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft),
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    //Color.fromRGBO(161, 161, 157, 1),
+                    //Color.fromRGBO(156, 156, 156, 1),
+                    //Color.fromRGBO(234, 237, 229, 1),
+                    Color.fromRGBO(105, 107, 111, 1),
+                    Color.fromRGBO(146, 148, 152, 1)
+                  ],//[Colors.lightBlue, Colors.blue],
+                    //begin: Alignment.topRight,
+                    //end: Alignment.bottomLeft
+                ),
               ),
               child: ElevatedButton(
                   onPressed: openCanvas,
