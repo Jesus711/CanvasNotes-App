@@ -614,12 +614,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      //Color.fromRGBO(161, 161, 157, 1),
-                      //Color.fromRGBO(156, 156, 156, 1),
-                      //Color.fromRGBO(234, 237, 229, 1),
                       Color.fromRGBO(105, 107, 111, 1),
                       Color.fromRGBO(146, 148, 152, 1)
-                    ],//[Colors.lightBlue, Colors.blue],
+                    ],
                   )
               )
           ),
