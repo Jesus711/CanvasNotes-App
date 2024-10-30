@@ -647,17 +647,26 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           bool? saveDrawing = await showDialog(
               context: context, builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text("Save Changes?"),
+              backgroundColor: const Color.fromRGBO(85, 87, 91, 1),
+              title: const Text("Save Changes?", textAlign: TextAlign.center ,style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),),
               content: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton(onPressed: () =>
-                  {
-                    Navigator.pop(context, true)
-                  }, child: const Text("Save")),
-                  ElevatedButton(onPressed: () =>
-                  {
-                    Navigator.pop(context, false)
-                  }, child: const Text("Leave"))
+                  ElevatedButton(
+                      onPressed: () => {Navigator.pop(context, false)},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red
+                      ),
+                      child: const Text("Exit", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500))
+                  ),
+                  ElevatedButton(
+                      onPressed: () => {Navigator.pop(context, true)},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue
+                      ),
+                      child: const Text("Save", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500))
+                  ),
                 ],
               ),
             );
