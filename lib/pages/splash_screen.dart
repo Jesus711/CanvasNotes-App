@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       });
     });
     
-    Future.delayed(const Duration(milliseconds: 3000), () {
+    Future.delayed(const Duration(milliseconds: 2200), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
     });
     
