@@ -16,6 +16,8 @@ class DrawingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double deviceHeight = MediaQuery.of(context).size.height;
 
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -64,14 +66,17 @@ class DrawingItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            drawing.drawingName == "Untitled"
-                                ? "${drawing.drawingName}${drawing.ID}"
-                                : drawing.drawingName,
-                            style: const TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                          SizedBox(
+                            width: deviceWidth / 1.5,
+                            child: Text(
+                              drawing.drawingName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
                           Text(
                             "Size: ${drawing.canvasSize}x${drawing.canvasSize}",
@@ -81,7 +86,7 @@ class DrawingItem extends StatelessWidget {
                                 fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            drawing.lastModifiedDate == ""
+                            drawing.lastModifiedDate == drawing.createdAtDate
                                 ? "Created On: ${drawing.createdAtDate}"
                                 : "Last Modified: ${drawing.lastModifiedDate}",
                             style: const TextStyle(
