@@ -447,20 +447,28 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
     String name = _nameController.text;
     if (saveDrawing) {
-      if (name.isEmpty) {
-        name = "Untitled";
-      }
 
       String drawingJSON = _convertImageToJson();
       DateTime now = DateTime.now();
       String bgString = convertBGtoString(_backgroundColor);
-      String createdDate =
-          "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
-      _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, "", bgString);
+      String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
+      String month = now.month.toString().padLeft(2, '0');
+      String day = now.day.toString().padLeft(2, '0');
+      String year = now.year.toString();
+      String hour = now.hour.toString().padLeft(2, '0');
+      String minute = now.minute.toString().padLeft(2, '0');
+      String second = now.second.toString().padLeft(2, '0');
+      if (name.isEmpty) {
+        name = "Untitled$month$day$year$hour$minute$second";
+      }
+
+      _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, createdDate, bgString);
+
       if(!onBackPressed){
         Navigator.pop(context, true);
         return null;
       }
+
       return true;
     }
 
@@ -671,19 +679,28 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
               ),
             );
           });
-
           if (saveDrawing == null) return;
-
           if (saveDrawing) {
             saveDrawingChanges(context);
+          }
+          else{
+            navigator.pop(false);
+            return;
           }
         }
         else if (importedDrawing == null && _controller.getJsonList().isNotEmpty) {
           bool? createDrawing  = await _getImageData(true);
           if (createDrawing == null) return;
-        }
 
-        navigator.pop();
+          if (createDrawing){
+            navigator.pop(true);
+          }
+          else{
+            navigator.pop(false);
+          }
+          return;
+        }
+        navigator.pop(true);
       },
       child: Scaffold(
           appBar: AppBar(
@@ -707,14 +724,16 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
             ],
             foregroundColor: Colors.white,
             backgroundColor: Colors.blue.shade600,
-            title: Text(
-              importedDrawing != null
-                  ? importedDrawing!.drawingName == "Untitled"
-                      ? "${importedDrawing!.drawingName}${importedDrawing!.ID}"
-                      : importedDrawing!.drawingName
-                  : "New Canvas",
-              style: const TextStyle(
-                  color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
+            title: SizedBox(
+              width: deviceWidth / 1.6,
+              child: Text(
+                importedDrawing != null
+                    ? importedDrawing!.drawingName
+                    : "New Canvas",
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           body: StatefulBuilder(
