@@ -39,8 +39,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   bool _showDrawTools = true;
   bool _showActiveColor = true;
 
-  final TransformationController _transformationController =
-      TransformationController();
+  final TransformationController _transformationController = TransformationController();
 
   void setColor(Color color) {
     setState(() {
@@ -256,12 +255,31 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     _transformationController.value = Matrix4.identity()..scale(1.4);
   }
 
+  Widget _buildLandscapeImage(Size size, data) {
+    return SizedBox(
+      width: size.width,
+      height: size.height,
+      child: Image.memory(data, fit: BoxFit.contain),
+    );
+  }
+
+  Widget _buildPortraitImage(Size size, data) {
+    return SizedBox(
+      width: size.width,
+      height: size.width * 0.9,
+        child: Image.memory(data, fit: BoxFit.contain)
+    );
+  }
+
   void displayFullCanvas() async {
     Uint8List? data = (await _controller.getImageData())?.buffer.asUint8List();
     if (data == null) {
       debugPrint('Error');
       return;
     }
+
+    Size size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
 
     if (mounted) {
       showDialog<void>(
@@ -271,43 +289,48 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
               color: Colors.transparent,
               child: InkWell(
                   onTap: () => Navigator.pop(c),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.memory(data),
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: orientation == Orientation.landscape ?
+                            _buildLandscapeImage(size, data) :
+                            _buildPortraitImage(size, data)
+                          ),
+                          ElevatedButton(
+                              onPressed: () => {_downloadImage(data)},
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 20,
+                                  backgroundColor: Colors.blue.shade600),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 8.0),
+                                    child: Icon(
+                                      Icons.download,
+                                      size: 32,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Download",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ))
+                        ],
                       ),
-                      ElevatedButton(
-                          onPressed: () => {_downloadImage(data)},
-
-                          style: ElevatedButton.styleFrom(
-                              elevation: 20,
-                              backgroundColor: Colors.blue.shade600),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 8.0),
-                                child: Icon(
-                                  Icons.download,
-                                  size: 32,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "Download",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ))
-                    ],
+                    ),
                   )),
             );
           });
