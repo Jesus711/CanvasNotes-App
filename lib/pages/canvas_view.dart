@@ -71,9 +71,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         builder: (BuildContext context) {
           return AlertDialog(
               titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              backgroundColor: _backgroundColor == Colors.black
-                  ? Colors.white.withOpacity(0.85)
-                  : Colors.black.withOpacity(0.5),
+              backgroundColor: Colors.grey.shade300,
               title: Container(
                   decoration: BoxDecoration(
                       color: Colors.blue.shade700,
@@ -90,7 +88,22 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
               content: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
                     return SingleChildScrollView(
-                        child: ColorPicker(activeColor: _backgroundColor),
+                        child: Column(
+                          children: [
+                            ColorPicker(activeColor: _backgroundColor),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue.shade700,
+                              ),
+                              onPressed: () => {
+                                setBackgroundColor(Colors.transparent),
+                                Navigator.pop(context)
+                              },
+                              child: const Text("Set as Transparent", textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 24, color: Colors.white),)
+                            )
+                          ],
+                        ),
                         );
                   }));
         }).then((colorChoice) {
