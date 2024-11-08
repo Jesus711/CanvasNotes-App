@@ -49,7 +49,6 @@ class DrawingDatabase {
     return database;
   }
 
-
   void addDrawing(String name, String jsonData, int size, String createdDate, String? lastModifiedDate, String backgroundColor) async {
     final db = await database;
     db.insert("Drawing", {
@@ -67,6 +66,7 @@ class DrawingDatabase {
   void deleteDrawing(int drawingID) async {
     final db = await database;
     db.delete("Drawing", where: "id = ?", whereArgs: [drawingID]);
+    log("Drawing Deleted");
   }
 
   void updateDrawing(int drawingID, String jsonChanges, String modifiedDate, String backgroundColor) async {
@@ -86,7 +86,7 @@ class DrawingDatabase {
     final data = await db.query("Drawing");
 
     List<Drawing> drawings = data.
-      map((drawing) =>
+    map((drawing) =>
         Drawing(
           ID: drawing["ID"] as int,
           drawingName: drawing["drawingName"] as String,
@@ -100,6 +100,5 @@ class DrawingDatabase {
 
     return drawings;
   }
-
 
 }

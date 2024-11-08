@@ -27,20 +27,8 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   String _error = "";
 
-  // TODO: Used for delay retrievals from database, may not be needed
-  Timer? debounce;
-  String searchQuery = "";
-
   final _searchController = TextEditingController();
   bool isSearching = false;
-
-  // TODO: Old way of handling sorting, may remove
-  List sortDrawings = [1, "ID", "ASC"];
-  static List sortMenuOptions = [
-    "Sort By Modified Date",
-    "Sort By Name",
-    "Sort By Canvas Size",
-  ];
 
   @override
   void initState() {
@@ -91,20 +79,6 @@ class _HomePageState extends State<HomePage> {
           _filteredDrawings.sort((a, b) => b.ID.compareTo(a.ID));
           break;
       }
-    });
-  }
-
-  // TODO: Remove
-  void onSearchChanged(String query) {
-
-    if (debounce?.isActive ?? false) {
-      debounce!.cancel();
-    }
-
-    debounce = Timer(const Duration(milliseconds: 500), () {
-      setState(() {
-        searchQuery = query;
-      });
     });
   }
 
@@ -224,106 +198,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // TODO: Remove
-  Widget sortMenu(BuildContext context) {
-    return PopupMenuButton<int>(
-      color: const Color.fromRGBO(65, 67, 71, 1),
-      menuPadding: EdgeInsets.zero,
-      icon: const Icon(
-        Icons.sort,
-        color: Colors.white,
-        size: 32,
-      ),
-      onSelected: (int value) async {
-        if (value == 1) {
-          setState(() {
-            sortDrawings = [value, "lastModifiedDate", "ASC"];
-          });
-        } else if (value == 2) {
-          setState(() {
-            sortDrawings = [value, "drawingName", "ASC"];
-          });
-        }
-        else if (value == 3) {
-          setState(() {
-            sortDrawings = [value, "canvasSize", "ASC"];
-          });
-        }
-        else if (value == 4) {
-          setState(() {
-            sortDrawings = [value, "lastModifiedDate", "DESC"];
-          });
-        }
-        else if (value == 5) {
-          setState(() {
-            sortDrawings = [value, "drawingName", "DESC"];
-          });
-        }
-        else if (value == 6) {
-          setState(() {
-            sortDrawings = [value, "canvasSize", "DESC"];
-          });
-        }
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuItem<int>>[
-        ...List.generate(sortMenuOptions.length, (index) {
-          return PopupMenuItem<int>(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-            value: index + 1,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-              decoration: BoxDecoration(
-                color: sortDrawings[0] == index + 1 ? const Color.fromRGBO(85, 87, 91, 1) : Colors.transparent,
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Icon(Icons.arrow_upward , color: sortDrawings[0] == index + 1 ? Colors.blue.shade200 : Colors.white, size: 22),
-                  ),
-                  Text(
-                    sortMenuOptions[index],
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: sortDrawings[0] == index + 1 ? FontWeight.w600 : FontWeight.w500,
-                        color: sortDrawings[0] == index + 1 ? Colors.blue.shade200 : Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }),
-        ...List.generate(sortMenuOptions.length, (index) {
-          return PopupMenuItem<int>(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-            value: index + 4,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-              decoration: BoxDecoration(
-                color: sortDrawings[0] == index + 4 ? const Color.fromRGBO(85, 87, 91, 1) : Colors.transparent,
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Icon(Icons.arrow_downward , color: sortDrawings[0] == index + 4  ? Colors.blue.shade200 : Colors.white, size: 22),
-                  ),
-                  Text(
-                    sortMenuOptions[index],
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: sortDrawings[0] == index + 4 ? FontWeight.w600 : FontWeight.w500,
-                        color: sortDrawings[0] == index + 4 ? Colors.blue.shade200 : Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-
   Widget _sortingMenu() {
     return PopupMenuButton<SortOption>(
       icon: const Icon(
@@ -377,44 +251,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // TODO: Remove
-  Widget _drawingList() {
-
-    return FutureBuilder(
-      future: _drawingDb.filterDrawings(searchQuery, sortDrawings[1], sortDrawings[2]),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          // If there's an error, show an error message
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-          // If the data is empty, show your empty state widget
-          return const EmptyList();
-        }
-
-        return Column(
-          children: [
-            const Text("Tap to Open Canvas",
-                style: TextStyle(color: Colors.white, fontSize: 20)),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: snapshot.data?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    Drawing drawing = snapshot.data![index];
-                    return DrawingItem(
-                        drawing: drawing,
-                        deleteDrawing: (value) => {_deleteCanvas(index, drawing.ID)},
-                        openCanvas: () => {_openSavedCanvas(drawing)},
-                    );
-                  }),
-            )
-          ],
-        );
-      },
-    );
-  }
-
   Widget _displayDrawingList() {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -457,11 +293,6 @@ class _HomePageState extends State<HomePage> {
           )
       )
     ]);
-  }
-
-  @override void dispose() {
-    debounce?.cancel();
-    super.dispose();
   }
 
   @override
