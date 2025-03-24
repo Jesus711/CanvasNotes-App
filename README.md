@@ -13,32 +13,33 @@ Drawing App created built with Flutter allows users to create, edit, and manage 
 
 ## 📸 Screenshots
 
+
 ### 🏠 Home Screen App Icon
-![App Icon](screenshots/App_Icon.png)
+<img src="screenshots/App_Icon.png" alt="Home Screen" width="400" height="400">
 
 ### 🏠 Home Screen
-![Home Screen](screenshots/Home_Screen.png)
+<img src="screenshots/Home_Screen.png" alt="Home Screen" width="400" height="400">
 
 ### Choosing Canvas
-![Choosing Canvas](screenshots/Canvas_Options.png)
+<img src="screenshots/Canvas_Options.png" alt="Home Screen" width="400" height="400">
 
 ### 🎨 Color Picker
-![Color Picker](screenshots/Color_Picker.png)
+<img src="screenshots/Color_Picker.png" alt="Home Screen" width="400" height="400">
 
 ### ✏️ Example Drawing
-![Example Drawing](screenshots/Drawing.png)
+<img src="screenshots/Drawing.png" alt="Home Screen" width="400" height="400">
 
 ### ✏️ Tools
-![Tools](screenshots/Tools.png)
+<img src="screenshots/Tools.png" alt="Home Screen" width="400" height="400">
 
 ### 📥 Downloaded Drawing
-![Downloaded Drawing](screenshots/Downloaded_Drawing.png)
+<img src="screenshots/Downloaded_Drawing.png" alt="Home Screen" width="400" height="400">
 
 ### 💾 Saving Drawing
-![Saving Drawing](screenshots/Saving_Drawing.png)
+<img src="screenshots/Saving_Drawing.png" alt="Home Screen" width="400" height="400">
 
 ### ✏️ Drawing List
-![Drawing List](screenshots/Drawing_List.png)
+<img src="screenshots/Drawing_List.png" alt="Home Screen" width="400" height="400">
 
 
 ## 🛠️ Technologies Used
