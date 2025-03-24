@@ -15,31 +15,31 @@ Drawing App created built with Flutter allows users to create, edit, and manage 
 
 
 ### 🏠 Home Screen App Icon
-<img src="screenshots/App_Icon.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/App_Icon.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### 🏠 Home Screen
-<img src="screenshots/Home_Screen.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Home_Screen.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### Choosing Canvas
-<img src="screenshots/Canvas_Options.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Canvas_Options.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### 🎨 Color Picker
-<img src="screenshots/Color_Picker.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Color_Picker.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### ✏️ Example Drawing
-<img src="screenshots/Drawing.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Drawing.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### ✏️ Tools
-<img src="screenshots/Tools.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Tools.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### 📥 Downloaded Drawing
-<img src="screenshots/Downloaded_Drawing.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Downloaded_Drawing.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### 💾 Saving Drawing
-<img src="screenshots/Saving_Drawing.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Saving_Drawing.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 ### ✏️ Drawing List
-<img src="screenshots/Drawing_List.png" alt="Home Screen" width="400" height="400">
+<img src="screenshots/Drawing_List.png" alt="Home Screen" width="250" height="360" style="object-fit: contain;">
 
 
 ## 🛠️ Technologies Used
