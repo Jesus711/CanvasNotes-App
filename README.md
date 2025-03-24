@@ -15,49 +15,32 @@ Drawing App created built with Flutter allows users to create, edit, and manage 
 
 
 ### 🏠 Home Screen App Icon
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/App_Icon.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/App_Icon.png" alt="Home Screen" width="150">
 
 ### 🏠 Home Screen
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Home_Screen.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Home_Screen.png" alt="Home Screen" width="150">
 
 ### Choosing Canvas
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Canvas_Options.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Canvas_Options.png" alt="Home Screen" width="150">
 
 ### 🎨 Color Picker
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Color_Picker.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Color_Picker.png" alt="Home Screen" width="150">
 
 ### ✏️ Example Drawing
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Drawing.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Drawing.png" alt="Home Screen" width="150">
 
 ### ✏️ Tools
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Tools.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Tools.png" alt="Home Screen" width="150">
 
 ### 📥 Downloaded Drawing
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Downloaded_Drawing.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Downloaded_Drawing.png" alt="Home Screen" width="150">
 
 ### 💾 Saving Drawing
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Saving_Drawing.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Saving_Drawing.png" alt="Home Screen" width="150">
 
 ### ✏️ Drawing List
-<div style="width:250px; height:360px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-  <img src="screenshots/Drawing_List.png" alt="Home Screen" style="max-width:100%; max-height:100%;">
-</div>
+<img src="screenshots/Drawing_List.png" alt="Home Screen" width="150">
+
 
 ## 🛠️ Technologies Used
 - **Flutter** – Cross-platform UI framework.
