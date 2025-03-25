@@ -15,31 +15,31 @@ Drawing App created built with Flutter allows users to create, edit, and manage 
 
 
 ### 🏠 Home Screen App Icon
-<img src="screenshots/App_Icon.png" alt="Home Screen" width="150">
+<img src="screenshots/App_Icon.png" alt="App Icon" width="150">
 
 ### 🏠 Home Screen
 <img src="screenshots/Home_Screen.png" alt="Home Screen" width="150">
 
 ### Choosing Canvas
-<img src="screenshots/Canvas_Options.png" alt="Home Screen" width="150">
+<img src="screenshots/Canvas_Options.png" alt="Canvas Options" width="150">
 
 ### 🎨 Color Picker
-<img src="screenshots/Color_Picker.png" alt="Home Screen" width="150">
+<img src="screenshots/Color_Picker.png" alt="Color Picker" width="150">
 
 ### ✏️ Example Drawing
-<img src="screenshots/Drawing.png" alt="Home Screen" width="150">
+<img src="screenshots/Drawing.png" alt="Drawing" width="150">
 
 ### ✏️ Tools
-<img src="screenshots/Tools.png" alt="Home Screen" width="150">
+<img src="screenshots/Tools.png" alt="Tools" width="150">
 
 ### 📥 Downloaded Drawing
-<img src="screenshots/Downloaded_Drawing.png" alt="Home Screen" width="150">
+<img src="screenshots/Downloaded_Drawing.png" alt="Drawing Downloaded" width="150">
 
 ### 💾 Saving Drawing
-<img src="screenshots/Saving_Drawing.png" alt="Home Screen" width="150">
+<img src="screenshots/Saving_Drawing.png" alt="Saving Drawing" width="150">
 
 ### ✏️ Drawing List
-<img src="screenshots/Drawing_List.png" alt="Home Screen" width="150">
+<img src="screenshots/Drawing_List.png" alt="Drawing List" width="150">
 
 
 ## 🛠️ Technologies Used
