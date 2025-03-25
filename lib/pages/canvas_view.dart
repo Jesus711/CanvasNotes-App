@@ -21,7 +21,8 @@ class CanvasView extends StatefulWidget {
   State<CanvasView> createState() => _CanvasViewState();
 }
 
-class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateMixin {
+class _CanvasViewState extends State<CanvasView>
+    with SingleTickerProviderStateMixin {
   final DrawingController _controller = DrawingController();
   final _nameController = TextEditingController();
 
@@ -39,7 +40,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   bool _showDrawTools = true;
   bool _showActiveColor = true;
 
-  final TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController =
+      TransformationController();
 
   void setColor(Color color) {
     setState(() {
@@ -55,12 +57,18 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   }
 
   Color getImportedBGColor() {
-    Map<String, dynamic> savedBGColor = jsonDecode(importedDrawing!.backgroundColor);
-    return Color.fromRGBO(savedBGColor["R"] as int, savedBGColor["G"] as int, savedBGColor["B"] as int, 1);
+    Map<String, dynamic> savedBGColor =
+        jsonDecode(importedDrawing!.backgroundColor);
+    return Color.fromRGBO(savedBGColor["R"] as int, savedBGColor["G"] as int,
+        savedBGColor["B"] as int, 1);
   }
 
   String convertBGtoString(Color color) {
-    Map<String, int> colors = {"R": _backgroundColor.red, "G":_backgroundColor.green, "B": _backgroundColor.blue };
+    Map<String, int> colors = {
+      "R": _backgroundColor.red,
+      "G": _backgroundColor.green,
+      "B": _backgroundColor.blue
+    };
     String bgString = jsonEncode(colors);
     return bgString;
   }
@@ -71,7 +79,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         builder: (BuildContext context) {
           return AlertDialog(
               titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              backgroundColor: Colors.grey.shade300,
+              backgroundColor: _backgroundColor == Colors.black
+                  ? Colors.grey.shade100.withOpacity(0.6)
+                  : Colors.black.withOpacity(0.55),
               title: Container(
                   decoration: BoxDecoration(
                       color: Colors.blue.shade700,
@@ -79,7 +89,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                   child: const Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
-                      "Background Color Picker",
+                      "Background Color",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
@@ -87,25 +97,27 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
               contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
               content: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
-                    return SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            ColorPicker(activeColor: _backgroundColor),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.shade700,
-                              ),
-                              onPressed: () => {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ColorPicker(activeColor: _backgroundColor),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                          ),
+                          onPressed: () => {
                                 setBackgroundColor(Colors.transparent),
                                 Navigator.pop(context)
                               },
-                              child: const Text("Set as Transparent", textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 24, color: Colors.white),)
-                            )
-                          ],
-                        ),
-                        );
-                  }));
+                          child: const Text(
+                            "Set as Transparent",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 24, color: Colors.white),
+                          ))
+                    ],
+                  ),
+                );
+              }));
         }).then((colorChoice) {
       if (colorChoice == null) return;
       Color color = colorChoice;
@@ -120,8 +132,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           return AlertDialog(
               titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               backgroundColor: _backgroundColor == Colors.black
-                  ? Colors.white.withOpacity(0.85)
-                  : Colors.black.withOpacity(0.5),
+                  ? Colors.grey.shade100.withOpacity(0.6)
+                  : Colors.black.withOpacity(0.55),
               title: Container(
                   decoration: BoxDecoration(
                       color: Colors.blue.shade700,
@@ -139,8 +151,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
               content: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
                 return SingleChildScrollView(
-                  child: Column(
-                    children: [
+                    child: Column(
+                  children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -206,11 +218,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     String drawingJson = _convertImageToJson();
 
     _drawingDb.updateDrawing(
-      importedDrawing!.ID,
-      drawingJson,
-      modifiedDate,
-      backgroundColor
-    );
+        importedDrawing!.ID, drawingJson, modifiedDate, backgroundColor);
 
     final snackBar = SnackBar(
       content: const Text(
@@ -218,7 +226,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ),
-      duration: const Duration(milliseconds: 1100), // Duration the snack bar will be shown
+      duration: const Duration(
+          milliseconds: 1100), // Duration the snack bar will be shown
       behavior: SnackBarBehavior.floating, // Makes the SnackBar float
       margin: const EdgeInsets.all(16.0), // Adds margin to the SnackBar
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -233,8 +242,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
   }
 
   void drawImportedDrawing() {
-    List<dynamic> drawingSteps = jsonDecode(importedDrawing!.drawingJSON) as List<dynamic>;
-    List<Map<String, dynamic>> lines = drawingSteps.cast<Map<String, dynamic>>();
+    List<dynamic> drawingSteps =
+        jsonDecode(importedDrawing!.drawingJSON) as List<dynamic>;
+    List<Map<String, dynamic>> lines =
+        drawingSteps.cast<Map<String, dynamic>>();
 
     for (var i = 0; i < lines.length; i++) {
       String lineType = lines[i]["type"];
@@ -278,10 +289,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
   Widget _buildPortraitImage(Size size, data) {
     return SizedBox(
-      width: size.width,
-      height: size.width * 0.9,
-        child: Image.memory(data, fit: BoxFit.contain)
-    );
+        width: size.width,
+        height: size.width * 0.9,
+        child: Image.memory(data, fit: BoxFit.contain));
   }
 
   void displayFullCanvas() async {
@@ -309,11 +319,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: orientation == Orientation.landscape ?
-                            _buildLandscapeImage(size, data) :
-                            _buildPortraitImage(size, data)
-                          ),
+                              padding: const EdgeInsets.all(12),
+                              child: orientation == Orientation.landscape
+                                  ? _buildLandscapeImage(size, data)
+                                  : _buildPortraitImage(size, data)),
                           ElevatedButton(
                               onPressed: () => {_downloadImage(data)},
                               style: ElevatedButton.styleFrom(
@@ -321,7 +330,8 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                                   backgroundColor: Colors.blue.shade600),
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
@@ -483,11 +493,11 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
 
     String name = _nameController.text;
     if (saveDrawing) {
-
       String drawingJSON = _convertImageToJson();
       DateTime now = DateTime.now();
       String bgString = convertBGtoString(_backgroundColor);
-      String createdDate = "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
+      String createdDate =
+          "${now.month}/${now.day}/${now.year} ${now.hour}:${now.minute < 10 ? "0${now.minute}" : now.minute}";
       String month = now.month.toString().padLeft(2, '0');
       String day = now.day.toString().padLeft(2, '0');
       String year = now.year.toString();
@@ -498,9 +508,10 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
         name = "Untitled$month$day$year$hour$minute$second";
       }
 
-      _drawingDb.addDrawing(name, drawingJSON, canvasSize, createdDate, createdDate, bgString);
+      _drawingDb.addDrawing(
+          name, drawingJSON, canvasSize, createdDate, createdDate, bgString);
 
-      if(!onBackPressed){
+      if (!onBackPressed) {
         Navigator.pop(context, true);
         return null;
       }
@@ -537,8 +548,7 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
           setState(() {
             _showActiveColor = !_showActiveColor;
           });
-        }
-        else if (value == 3) {
+        } else if (value == 3) {
           if (importedDrawing != null) {
             saveDrawingChanges(context);
           } else {
@@ -583,7 +593,9 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                child: Icon(_showActiveColor ? Icons.visibility_off : Icons.visibility, size: 32),
+                child: Icon(
+                    _showActiveColor ? Icons.visibility_off : Icons.visibility,
+                    size: 32),
               ),
               Text(
                 _showActiveColor ? "Hide Active Color" : "Show Active Color",
@@ -681,57 +693,68 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop){
+        if (didPop) {
           return;
         }
         final navigator = Navigator.of(context);
 
-        if (importedDrawing != null && (drawingLastSave != _convertImageToJson() || _backgroundColor != getImportedBGColor())) {
-
+        if (importedDrawing != null &&
+            (drawingLastSave != _convertImageToJson() ||
+                _backgroundColor != getImportedBGColor())) {
           bool? saveDrawing = await showDialog(
-              context: context, builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: const Color.fromRGBO(85, 87, 91, 1),
-              title: const Text("Save Changes?", textAlign: TextAlign.center ,style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),),
-              content: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                      onPressed: () => {Navigator.pop(context, false)},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red
-                      ),
-                      child: const Text("Exit", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500))
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: const Color.fromRGBO(85, 87, 91, 1),
+                  title: const Text(
+                    "Save Changes?",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600),
                   ),
-                  ElevatedButton(
-                      onPressed: () => {Navigator.pop(context, true)},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue
-                      ),
-                      child: const Text("Save", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500))
+                  content: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () => {Navigator.pop(context, false)},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red),
+                          child: const Text("Exit",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500))),
+                      ElevatedButton(
+                          onPressed: () => {Navigator.pop(context, true)},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue),
+                          child: const Text("Save",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500))),
+                    ],
                   ),
-                ],
-              ),
-            );
-          });
+                );
+              });
           if (saveDrawing == null) return;
           if (saveDrawing) {
             saveDrawingChanges(context);
-          }
-          else{
+          } else {
             navigator.pop(false);
             return;
           }
-        }
-        else if (importedDrawing == null && _controller.getJsonList().isNotEmpty) {
-          bool? createDrawing  = await _getImageData(true);
+        } else if (importedDrawing == null &&
+            _controller.getJsonList().isNotEmpty) {
+          bool? createDrawing = await _getImageData(true);
           if (createDrawing == null) return;
 
-          if (createDrawing){
+          if (createDrawing) {
             navigator.pop(true);
-          }
-          else{
+          } else {
             navigator.pop(false);
           }
           return;
@@ -743,15 +766,13 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
             flexibleSpace: Container(
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromRGBO(105, 107, 111, 1),
-                        Color.fromRGBO(146, 148, 152, 1)
-                      ],
-                    )
-                )
-            ),
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(105, 107, 111, 1),
+                Color.fromRGBO(146, 148, 152, 1)
+              ],
+            ))),
             actions: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -768,120 +789,116 @@ class _CanvasViewState extends State<CanvasView> with SingleTickerProviderStateM
                     : "New Canvas",
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                    color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600),
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600),
               ),
             ),
           ),
           body: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-            return Stack(
-              children:
-              [
-                DrawingBoard(
-                    controller: _controller,
-                    background: Container(
-                      width: canvasSize * 1.0,
-                      height: canvasSize * 1.0,
-                      decoration: BoxDecoration(
-                        color: _backgroundColor,
+            return Stack(children: [
+              DrawingBoard(
+                  controller: _controller,
+                  background: Container(
+                    width: canvasSize * 1.0,
+                    height: canvasSize * 1.0,
+                    decoration: BoxDecoration(
+                      color: _backgroundColor,
+                    ),
+                  ),
+                  minScale: 0.05,
+                  transformationController: _transformationController,
+                  // TODO: Build own tools to fix menu toggle bug
+                  // BUG: When max zoomed out with menu showing, toggling menu causes canvas to spring to the top
+                  // due to rerender
+                  showDefaultActions: _showDrawTools,
+                  showDefaultTools: _showDrawTools,
+                  defaultToolsBuilder: (Type t, _) {
+                    return DrawingBoard.defaultTools(t, _controller)
+                      ..insert(
+                          0,
+                          DefToolItem(
+                            icon: Icons.color_lens_rounded,
+                            color: Colors.blue.shade500,
+                            onTap: () => displayColorPicker(),
+                            iconSize: 36,
+                            isActive: false,
+                          ))
+                      ..insert(
+                          1,
+                          DefToolItem(
+                            icon: Icons.format_color_fill,
+                            color: Colors.blue,
+                            onTap: () => {
+                              displayBackgroundColorPicker(),
+                            },
+                            iconSize: 36,
+                            isActive: false,
+                          ));
+                  }),
+              _showActiveColor
+                  ? Positioned(
+                      top: 5,
+                      left: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 4),
+                        child: Row(children: [
+                          const Text(
+                            "Active Color: ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Icon(
+                              Icons.circle,
+                              color: _activeColor.withOpacity(_colorOpacity),
+                              size: 32,
+                            ),
+                          )
+                        ]),
+                      ),
+                    )
+                  : Container(),
+              Positioned(
+                  bottom: _showDrawTools ? 100 : 10,
+                  right: 5,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: _showDrawTools
+                        ? Matrix4.rotationX(0)
+                        : Matrix4.rotationX(math.pi),
+                    child: IconButton(
+                      padding: const EdgeInsets.all(4),
+                      tooltip: _showDrawTools
+                          ? "Close Draw Tools"
+                          : "Open Draw Tools",
+                      onPressed: () {
+                        setState(() {
+                          _showDrawTools = !_showDrawTools;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.expand_circle_down,
+                        size: 36,
+                        color: _backgroundColor == Colors.black
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
-                    minScale: 0.05,
-                    transformationController: _transformationController,
-                    // TODO: Build own tools to fix menu toggle bug
-                    // BUG: When max zoomed out with menu showing, toggling menu causes canvas to spring to the top
-                    // due to rerender
-                    showDefaultActions: _showDrawTools,
-                    showDefaultTools: _showDrawTools,
-                    defaultToolsBuilder: (Type t, _) {
-                      return DrawingBoard.defaultTools(t, _controller)
-                        ..insert(
-                            0,
-                            DefToolItem(
-                              icon: Icons.color_lens_rounded,
-                              color: Colors.blue.shade500,
-                              onTap: () => displayColorPicker(),
-                              iconSize: 36,
-                              isActive: false,
-                            ))
-                        ..insert(
-                            1,
-                            DefToolItem(
-                              icon: Icons.format_color_fill,
-                              color: Colors.blue,
-                              onTap: () => {
-                                displayBackgroundColorPicker(),
-                              },
-                              iconSize: 36,
-                              isActive: false,
-                            )
-                        );
-                      }
-                    ),
-                _showActiveColor ? Positioned(
-                    top: 10,
-                    left: 5,
-                    child: Row(
-                      children: [
-                        Text(
-                          "Active Color: ",
-                          style: TextStyle(
-                              color: _backgroundColor == Colors.black ? Colors.white : Colors.black,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        _backgroundColor == Colors.black
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Icon(
-                                  Icons.circle,
-                                  color: _activeColor.withOpacity(_colorOpacity),
-                                  size: 32,
-                                ),
-                              )
-                            : Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius:  BorderRadius.circular(20),
-                              ),
-                              child: Icon(
-                                  Icons.circle,
-                                  color: _activeColor.withOpacity(_colorOpacity),
-                                  size: 32,
-                                ),
-                            )
-                      ],
-                    )
-                ) : Container(),
-                Positioned(
-                    bottom: _showDrawTools ? 100 : 10,
-                    right: 5,
-                    child: Transform(
-                      alignment: Alignment.center,
-                      transform: _showDrawTools ? Matrix4.rotationX(0) : Matrix4.rotationX(math.pi),
-                      child: IconButton(
-                        padding: const EdgeInsets.all(4),
-                        tooltip: _showDrawTools ? "Close Draw Tools" :"Open Draw Tools",
-                        onPressed: () {
-                          setState(() {
-                            _showDrawTools = !_showDrawTools;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.expand_circle_down,
-                          size: 36,
-                          color: _backgroundColor == Colors.black ? Colors.white : Colors.black,),
-                        ),
-                    )
-                    ),
-                ]
-            );
-          }
-          )
-      ),
+                  )),
+            ]);
+          })),
     );
   }
 }
