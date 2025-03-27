@@ -55,5 +55,12 @@ Drawing App created built with Flutter allows users to create, edit, and manage 
 - **Path Provider** – For accessing the file system.
 
 ## Other Dependencies
-- **flutter_drawing_board** - Drawing Board with action bar
+- **flutter_drawing_board** - Drawing Board with actions and tools 
 - **flutter_slidable** - For slidable list items
+
+## 🐞 Known Issues  
+- ❗ When max zoomed out with action and tool menu showing, toggling menu to hide causes vertical scrolling to not work and canvas appears at the top of the screen. Fixes when user zooms in.
+
+## 🔮 Future Improvements  
+- 🎨 Enhance UI responsiveness across all screen sizes.
+- ✅ Implement custom action and tool bars.
